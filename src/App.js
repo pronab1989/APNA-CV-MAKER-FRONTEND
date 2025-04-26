@@ -34,31 +34,68 @@
 // export default App;
 
 
-// src/App.js
+// // src/App.js
+// import React from 'react';
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import HomePage from './components/HomePage';
+// import Signup from './pages/Signup';
+// import Login from './pages/Login';
+// import ResumeForm from './pages/ResumeForm';
+// import ResumePreview from "./components/ResumePreview";
+// import formData from "./data/sampleFormData";
+// import { useLocation } from 'react-router-dom';
+
+
+// const ResumePreviewWrapper = () => {
+//   const { state } = useLocation();
+//   return <ResumePreview formData={state} />;
+// };
+
+// function App() {
+//   return (
+//     <Router>
+//       <div className="App">
+//         <Routes>
+//           <Route path="/" element={<HomePage />} />
+//           <Route path="/signup" element={<Signup />} />
+//           <Route path="/login" element={<Login />} /> 
+//           <Route path="/form" element={<ResumeForm />} /> 
+//           <Route path="/preview" element={<ResumePreview formData={formData} />} />
+//         </Routes>
+//       </div>
+//     </Router>
+//   );
+// }
+
+// export default App;
+
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import ResumeForm from './pages/ResumeForm';
-import ResumePreview from "./components/ResumePreview";
-import formData from "./data/sampleFormData";
+import ResumePreview from './components/ResumePreview';
+
+const ResumePreviewWrapper = () => {
+  const { state } = useLocation();
+  return <ResumePreview formData={state} />;
+};
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} /> 
-          <Route path="/form" element={<ResumeForm />} /> 
-          <Route path="/preview" element={<ResumePreview formData={formData} />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/form" element={<ResumeForm />} />
+        <Route path="/preview" element={<ResumePreviewWrapper />} />
+      </Routes>
     </Router>
   );
 }
 
 export default App;
+
 
