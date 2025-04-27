@@ -2,7 +2,6 @@ import React from 'react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { useLocation, useNavigate } from 'react-router-dom';
-import html2pdf from 'html2pdf.js';
 
 const ResumePreview = () => {
   const location = useLocation();
@@ -30,275 +29,14 @@ const ResumePreview = () => {
       : new Date(date).toLocaleDateString();
   };
 
-  const downloadPDF = () => {
-    const doc = new jsPDF();
-    let yPos = 15;
-    const pageWidth = doc.internal.pageSize.width;
-    const margin = 10;
-    const contentWidth = pageWidth - (2 * margin);
-
-    // Add a subtle background color to the entire page
-    doc.setFillColor(250, 250, 250);
-    doc.rect(0, 0, pageWidth, doc.internal.pageSize.height, 'F');
-
-    // Name as main title
-    doc.setFontSize(28);
-    doc.setTextColor(44, 62, 80); // Dark blue-gray
-    doc.setFont('helvetica', 'bold');
-    doc.text(`${formData.firstName || ''} ${formData.lastName || ''}`, pageWidth/2, yPos, { align: 'center' });
-    yPos += 10;
-
-    // Contact info in a single line
-    doc.setFontSize(10);
-    doc.setTextColor(52, 73, 94); // Slightly lighter blue-gray
-    const contactInfo = [];
-    if (formData.phones?.[0]) contactInfo.push(formData.phones[0]);
-    if (formData.emails?.[0]) contactInfo.push(formData.emails[0]);
-    doc.text(contactInfo.join(' • '), pageWidth/2, yPos + 5, { align: 'center' });
-    yPos += 15;
-
-    // Professional Summary
-    if (formData.summary) {
-      doc.setFontSize(14);
-      doc.setTextColor(41, 128, 185); // Blue
-      doc.setFont('helvetica', 'bold');
-      doc.text('PROFESSIONAL SUMMARY', margin, yPos + 5);
-      yPos += 10;
-
-      doc.setFontSize(10);
-      doc.setTextColor(52, 73, 94);
-      doc.setFont('helvetica', 'normal');
-      
-      // Add a light gray background to the summary section
-      doc.setFillColor(245, 245, 245);
-      doc.roundedRect(margin, yPos, contentWidth, 20, 2, 2, 'F');
-      
-      autoTable(doc, {
-        startY: yPos + 2,
-        margin: { left: margin + 2, right: margin + 2 },
-        body: [[formData.summary]],
-        theme: 'plain',
-        styles: {
-          fontSize: 10,
-          cellPadding: 2,
-          textColor: [52, 73, 94]
-        }
-      });
-      yPos = doc.lastAutoTable.finalY + 10;
-    }
-
-    // Experience Section
-    if (formData.experienceList?.length > 0 || formData.currentJob?.company) {
-      doc.setFontSize(14);
-      doc.setTextColor(41, 128, 185);
-      doc.setFont('helvetica', 'bold');
-      doc.text('PROFESSIONAL EXPERIENCE', margin, yPos + 5);
-      yPos += 10;
-
-      // Current Job
-      if (formData.currentJob?.company) {
-        doc.setFontSize(12);
-        doc.setTextColor(44, 62, 80);
-        doc.setFont('helvetica', 'bold');
-        doc.text(formData.currentJob.company, margin, yPos + 5);
-        
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'italic');
-        doc.text(formData.currentJob.role, margin + 2, yPos + 10);
-        
-        doc.setFont('helvetica', 'normal');
-        doc.text(`${formatDate(formData.currentJob.startDate)} - Present`, pageWidth - margin, yPos + 10, { align: 'right' });
-        yPos += 15;
-      }
-
-      // Previous Experience
-      formData.experienceList.forEach(exp => {
-        doc.setFontSize(12);
-        doc.setTextColor(44, 62, 80);
-        doc.setFont('helvetica', 'bold');
-        doc.text(exp.company, margin, yPos + 5);
-        
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'italic');
-        doc.text(exp.role, margin + 2, yPos + 10);
-        
-        doc.setFont('helvetica', 'normal');
-        doc.text(`${formatDate(exp.startDate)} - ${formatDate(exp.endDate)}`, pageWidth - margin, yPos + 10, { align: 'right' });
-        
-        if (exp.responsibilities) {
-          doc.setFont('helvetica', 'normal');
-          autoTable(doc, {
-            startY: yPos + 12,
-            margin: { left: margin + 5, right: margin },
-            body: [[exp.responsibilities]],
-            theme: 'plain',
-            styles: {
-              fontSize: 9,
-              cellPadding: 1,
-              textColor: [52, 73, 94]
-            }
-          });
-          yPos = doc.lastAutoTable.finalY + 5;
-        } else {
-          yPos += 15;
-        }
-      });
-    }
-
-    // Skills Section with two columns
-    if (formData.technicalSkills?.length > 0 || formData.nonTechnicalSkills?.length > 0) {
-      yPos += 5;
-      doc.setFontSize(14);
-      doc.setTextColor(41, 128, 185);
-      doc.setFont('helvetica', 'bold');
-      doc.text('SKILLS', margin, yPos + 5);
-      yPos += 10;
-
-      const skillsTableData = [];
-      if (formData.technicalSkills?.length > 0) {
-        skillsTableData.push([{
-          content: 'Technical',
-          styles: { fontStyle: 'bold', textColor: [44, 62, 80] }
-        }, {
-          content: formData.technicalSkills.map(s => s.label).join(' • '),
-          styles: { textColor: [52, 73, 94] }
-        }]);
-      }
-      if (formData.nonTechnicalSkills?.length > 0) {
-        skillsTableData.push([{
-          content: 'Soft Skills',
-          styles: { fontStyle: 'bold', textColor: [44, 62, 80] }
-        }, {
-          content: formData.nonTechnicalSkills.map(s => s.label).join(' • '),
-          styles: { textColor: [52, 73, 94] }
-        }]);
-      }
-
-      // Add a light background to the skills section
-      doc.setFillColor(245, 245, 245);
-      doc.roundedRect(margin, yPos, contentWidth, 20, 2, 2, 'F');
-
-      autoTable(doc, {
-        startY: yPos + 2,
-        margin: { left: margin + 2, right: margin + 2 },
-        body: skillsTableData,
-        theme: 'plain',
-        styles: {
-          fontSize: 10,
-          cellPadding: 2
-        },
-        columnStyles: {
-          0: { cellWidth: 30 },
-          1: { cellWidth: contentWidth - 35 }
-        }
-      });
-      yPos = doc.lastAutoTable.finalY + 10;
-    }
-
-    // Education Section
-    if (formData.educationList?.length > 0) {
-      doc.setFontSize(14);
-      doc.setTextColor(41, 128, 185);
-      doc.setFont('helvetica', 'bold');
-      doc.text('EDUCATION', margin, yPos + 5);
-      yPos += 10;
-
-      formData.educationList.forEach(edu => {
-        doc.setFontSize(12);
-        doc.setTextColor(44, 62, 80);
-        doc.setFont('helvetica', 'bold');
-        doc.text(edu.school, margin, yPos + 5);
-        
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'italic');
-        doc.text(edu.degree, margin + 2, yPos + 10);
-        
-        doc.setFont('helvetica', 'normal');
-        doc.text(edu.passingYear.toString(), pageWidth - margin, yPos + 10, { align: 'right' });
-        yPos += 15;
-      });
-    }
-
-    // Projects Section
-    if (formData.projects?.length > 0) {
-      yPos += 5;
-      doc.setFontSize(14);
-      doc.setTextColor(41, 128, 185);
-      doc.setFont('helvetica', 'bold');
-      doc.text('PROJECTS', margin, yPos + 5);
-      yPos += 10;
-
-      formData.projects.forEach(proj => {
-        doc.setFontSize(12);
-        doc.setTextColor(44, 62, 80);
-        doc.setFont('helvetica', 'bold');
-        doc.text(proj.title, margin, yPos + 5);
-        
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'italic');
-        doc.text(`Technologies: ${proj.technologies}`, margin + 2, yPos + 10);
-        
-        if (proj.description) {
-          autoTable(doc, {
-            startY: yPos + 12,
-            margin: { left: margin + 5, right: margin },
-            body: [[proj.description]],
-            theme: 'plain',
-            styles: {
-              fontSize: 9,
-              cellPadding: 1,
-              textColor: [52, 73, 94]
-            }
-          });
-          yPos = doc.lastAutoTable.finalY + 5;
-        } else {
-          yPos += 15;
-        }
-      });
-    }
-
-    // Social Links Section
-    if (formData.socialLinks) {
-      const socialLinks = [];
-      if (formData.socialLinks.linkedin) socialLinks.push(`LinkedIn: ${formData.socialLinks.linkedin}`);
-      if (formData.socialLinks.github) socialLinks.push(`GitHub: ${formData.socialLinks.github}`);
-      if (formData.socialLinks.portfolio) socialLinks.push(`Portfolio: ${formData.socialLinks.portfolio}`);
-
-      if (socialLinks.length > 0) {
-        yPos += 5;
-        doc.setFontSize(14);
-        doc.setTextColor(41, 128, 185);
-        doc.setFont('helvetica', 'bold');
-        doc.text('CONNECT', margin, yPos + 5);
-        yPos += 10;
-
-        doc.setFontSize(9);
-        doc.setTextColor(52, 73, 94);
-        doc.setFont('helvetica', 'normal');
-        socialLinks.forEach((link, index) => {
-          doc.text(link, margin + 2, yPos + (index * 5));
-        });
-      }
-    }
-
-    // Footer with page number
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      doc.setPage(i);
-      doc.setFontSize(8);
-      doc.setTextColor(128, 128, 128);
-      doc.text(
-        `Page ${i} of ${pageCount}`,
-        pageWidth - margin,
-        doc.internal.pageSize.height - 10,
-        { align: 'right' }
-      );
-    }
-
-    // Save the PDF
-    const fileName = `resume_${formData.firstName.toLowerCase()}_${formData.lastName.toLowerCase()}_${resumeId || 'preview'}.pdf`;
-    doc.save(fileName);
-  };
+  function formatDateDMY(date) {
+    if (!date) return '';
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
 
   const generatePDF = async () => {
     try {
@@ -308,6 +46,8 @@ const ResumePreview = () => {
       }
 
       const doc = new jsPDF();
+      const margin = 12.7; // 0.5 inch in mm
+      const pageWidth = doc.internal.pageSize.getWidth();
       const template = `
         <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa;">
           <div style="background-color: #2c3e50; color: white; padding: 20px; margin: -20px -20px 20px -20px;">
@@ -315,6 +55,7 @@ const ResumePreview = () => {
             <div style="text-align: center; color: #ecf0f1;">
               <p style="margin: 5px 0;">${formData.phones?.[0] || ''}</p>
               <p style="margin: 5px 0;">${formData.emails?.[0] || ''}</p>
+              <p style="margin: 5px 0;">${formData.dob ? `DOB-${formatDateDMY(formData.dob)}` : ''}</p>
               <p style="margin: 5px 0;">${formData.address || ''}</p>
             </div>
           </div>
@@ -395,16 +136,21 @@ const ResumePreview = () => {
               </div>
             </div>
           ` : ''}
+
+          <div style="margin-top: 30px; text-align: left; color: #2c3e50; font-size: 1rem;">
+            <strong>Declaration:</strong> I hereby declare that the information provided above is true to the best of my knowledge.
+          </div>
         </div>
       `;
 
       doc.html(template, {
         callback: function(doc) {
           doc.save(`resume_${formData.firstName}_${formData.lastName}.pdf`);
+          localStorage.removeItem('resumeFormData');
         },
-        x: 10,
-        y: 10,
-        width: 190,
+        x: margin,
+        y: margin,
+        width: pageWidth - 2 * margin,
         windowWidth: 1000
       });
     } catch (error) {

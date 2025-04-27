@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
@@ -277,6 +277,8 @@ const [lastName, setLastName] = useState('');
   const [emails, setEmails] = useState(['']);
   const [summary, setSummary] = useState('');
   const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const [pin, setPin] = useState('');
 
   const addPhone = () => setPhones([...phones, '']);
   const addEmail = () => setEmails([...emails, '']);
@@ -457,6 +459,35 @@ const [socialLinks, setSocialLinks] = useState({
     medium: ''
   });
 
+  const handleSummaryGenerated = (generatedSummary) => {
+    setSummary(generatedSummary);
+  };
+
+  // On mount, check localStorage for saved form data
+  useEffect(() => {
+    const savedData = localStorage.getItem('resumeFormData');
+    if (savedData) {
+      const data = JSON.parse(savedData);
+      setFirstName(data.firstName || '');
+      setLastName(data.lastName || '');
+      setDob(data.dob ? new Date(data.dob) : null);
+      setPhones(data.phones || ['']);
+      setEmails(data.emails || ['']);
+      setSummary(data.summary || '');
+      setState(data.state || '');
+      setCountry(data.country || '');
+      setPin(data.pin || '');
+      setEducationList(data.educationList || [{ school: '', degree: '', passingYear: '' }]);
+      setExperienceList(data.experienceList || [{ company: '', role: '', startDate: null, endDate: null, responsibilities: '' }]);
+      setCurrentJob(data.currentJob || { company: '', role: '', roleLabel: '', startDate: null, isWorking: true });
+      setTechnicalSkills(data.technicalSkills || []);
+      setNonTechnicalSkills(data.nonTechnicalSkills || []);
+      setProjects(data.projects || [{ title: '', technologies: '', description: '', startDate: null, endDate: null }]);
+      setSocialLinks(data.socialLinks || { github: '', linkedin: '', portfolio: '', twitter: '', medium: '' });
+      setHobbies(data.hobbies || []);
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -470,36 +501,59 @@ const [socialLinks, setSocialLinks] = useState({
     const formData = {
       firstName,
       lastName,
-      dob: dob.toISOString().split('T')[0], // Convert Date to YYYY-MM-DD format
-      phones: phones.filter(phone => phone.trim() !== ''), // Remove empty strings
-      emails: emails.filter(email => email.trim() !== ''), // Remove empty strings
+      dob: dob ? dob.toISOString().split('T')[0] : '',
+      phones: phones.filter(phone => phone.trim() !== ''),
+      emails: emails.filter(email => email.trim() !== ''),
       state,
+      country,
+      pin,
       educationList: educationList.filter(edu => edu.school && edu.degree && edu.passingYear).map(edu => ({
         ...edu,
         passingYear: edu.passingYear ? edu.passingYear.toString() : ''
-      })), // Remove empty education entries and convert passingYear to string
+      })),
       experienceList: experienceList.filter(exp => exp.company && exp.role).map(exp => ({
         ...exp,
-        startDate: exp.startDate ? exp.startDate.toISOString().split('T')[0] : null,
-        endDate: exp.endDate ? exp.endDate.toISOString().split('T')[0] : null
-      })), // Remove empty experience entries and format dates
+        startDate: exp.startDate
+          ? (exp.startDate instanceof Date
+              ? exp.startDate.toISOString().split('T')[0]
+              : new Date(exp.startDate).toISOString().split('T')[0])
+          : null,
+        endDate: exp.endDate
+          ? (exp.endDate instanceof Date
+              ? exp.endDate.toISOString().split('T')[0]
+              : new Date(exp.endDate).toISOString().split('T')[0])
+          : null
+      })),
       currentJob: currentJob.company && currentJob.role ? {
         ...currentJob,
-        startDate: currentJob.startDate ? currentJob.startDate.toISOString().split('T')[0] : null
-      } : null, // Only include if company and role are present and format date
-      technicalSkills: technicalSkills.map(skill => ({ value: skill.value, label: skill.label })), // Convert to array of objects
-      nonTechnicalSkills: nonTechnicalSkills.map(skill => ({ value: skill.value, label: skill.label })), // Convert to array of objects
+        startDate: currentJob.startDate
+          ? (currentJob.startDate instanceof Date
+              ? currentJob.startDate.toISOString().split('T')[0]
+              : new Date(currentJob.startDate).toISOString().split('T')[0])
+          : null
+      } : null,
+      technicalSkills: technicalSkills.map(skill => ({ value: skill.value, label: skill.label })),
+      nonTechnicalSkills: nonTechnicalSkills.map(skill => ({ value: skill.value, label: skill.label })),
       projects: projects.filter(proj => proj.title && proj.description).map(proj => ({
         ...proj,
-        startDate: proj.startDate ? proj.startDate.toISOString().split('T')[0] : null,
-        endDate: proj.endDate ? proj.endDate.toISOString().split('T')[0] : null
-      })), // Remove empty project entries and format dates
-      socialLinks: Object.fromEntries(
-        Object.entries(socialLinks).filter(([_, value]) => value.trim() !== '')
-      ), // Remove empty social links
-      hobbies: hobbies.map(hobby => ({ value: hobby.value, label: hobby.label })), // Convert to array of objects
+        startDate: proj.startDate
+          ? (proj.startDate instanceof Date
+              ? proj.startDate.toISOString().split('T')[0]
+              : new Date(proj.startDate).toISOString().split('T')[0])
+          : null,
+        endDate: proj.endDate
+          ? (proj.endDate instanceof Date
+              ? proj.endDate.toISOString().split('T')[0]
+              : new Date(proj.endDate).toISOString().split('T')[0])
+          : null
+      })),
+      socialLinks: Object.fromEntries(Object.entries(socialLinks).filter(([_, value]) => value.trim() !== '')),
+      hobbies: hobbies.map(hobby => ({ value: hobby.value, label: hobby.label })),
       summary,
     };
+  
+    // Save to localStorage
+    localStorage.setItem('resumeFormData', JSON.stringify(formData));
   
     try {
       // Save to database
@@ -525,6 +579,16 @@ const [socialLinks, setSocialLinks] = useState({
   
   return (
     <div className="container mt-4">
+      {/* Home Button */}
+      <div className="mb-3">
+        <button
+          type="button"
+          className="btn btn-outline-primary"
+          onClick={() => navigate('/')}
+        >
+          Home
+        </button>
+      </div>
       <form onSubmit={handleSubmit}>
         {/* === Personal Details Section === */}
         <h3>Personal Details</h3>
@@ -606,11 +670,11 @@ const [socialLinks, setSocialLinks] = useState({
           </div>
           <div className="col-md-4 my-2">
             <label>PIN Code</label>
-            <input className="form-control" name="pin" />
+            <input className="form-control" name="pin" value={pin} onChange={(e) => setPin(e.target.value)} />
           </div>
           <div className="col-md-6 my-2">
             <label>Country</label>
-            <Select options={countryOptions} />
+            <Select options={countryOptions} value={countryOptions.find(opt => opt.value === country) || null} onChange={selected => setCountry(selected ? selected.value : '')} />
           </div>
         </div>
 
@@ -905,11 +969,10 @@ const [socialLinks, setSocialLinks] = useState({
           </div>
         </div>
 
-        {/* === Summary Section (now at the bottom) === */}
-        <hr />
-        <h3 className="mt-4">Summary</h3>
+        {/* === Summary Section */}
         <div className="row">
           <div className="col-12 my-2">
+            <h3>Professional Summary</h3>
             <SummaryGenerator 
               formData={{
                 experienceList,
@@ -919,12 +982,11 @@ const [socialLinks, setSocialLinks] = useState({
                 educationList,
                 projects
               }}
-              onSummaryGenerated={(generatedSummary) => setSummary(generatedSummary)}
+              onSummaryGenerated={handleSummaryGenerated}
             />
-            <label>Summary</label>
             <textarea
               className="form-control"
-              rows="4"
+              rows="5"
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="Write a brief summary of your professional experience and skills..."

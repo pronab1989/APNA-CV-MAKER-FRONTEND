@@ -1,72 +1,67 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { FaWandMagic } from 'react-icons/fa6';
 
 const SummaryGenerator = ({ formData, onSummaryGenerated }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateSummary = async () => {
-    setIsLoading(true);
-    setError('');
+  const generateSummary = () => {
+    setIsGenerating(true);
+    
+    // Extract relevant information from formData
+    const currentJob = formData.currentJob || {};
+    const skills = [...(formData.technicalSkills || []), ...(formData.nonTechnicalSkills || [])];
+    const education = formData.educationList || [];
+    const projects = formData.projects || [];
 
-    try {
-      // Extract key information from form data
-      const { 
-        experienceList, 
-        currentJob, 
-        technicalSkills, 
-        nonTechnicalSkills,
-        educationList,
-        projects
-      } = formData;
+    // Generate summary points
+    const summaryPoints = [];
 
-      // Prepare data for AI generation
-      const promptData = {
-        experience: experienceList.map(exp => ({
-          role: exp.role,
-          company: exp.company,
-          responsibilities: exp.responsibilities
-        })),
-        currentRole: currentJob?.role || '',
-        currentCompany: currentJob?.company || '',
-        technicalSkills: technicalSkills?.map(skill => skill.label) || [],
-        softSkills: nonTechnicalSkills?.map(skill => skill.label) || [],
-        education: educationList?.map(edu => ({
-          degree: edu.degree,
-          school: edu.school
-        })) || [],
-        projects: projects?.map(proj => ({
-          title: proj.title,
-          technologies: proj.technologies
-        })) || []
-      };
-
-      // Call backend API to generate summary
-      const response = await axios.post('http://localhost:5000/api/generate-summary', promptData);
-      
-      if (response.data.summary) {
-        onSummaryGenerated(response.data.summary);
-      } else {
-        throw new Error('No summary generated');
-      }
-    } catch (err) {
-      console.error('Error generating summary:', err);
-      setError('Failed to generate summary. Please try again.');
-    } finally {
-      setIsLoading(false);
+    // Add professional title and key skills
+    if (currentJob.role) {
+      const keySkills = skills.slice(0, 3).map(skill => skill.label).join(', ');
+      summaryPoints.push(`Experienced ${currentJob.role} with expertise in ${keySkills}.`);
     }
+
+    // Add current role and company
+    if (currentJob.company) {
+      summaryPoints.push(`Currently working at ${currentJob.company} as a ${currentJob.role}.`);
+    }
+
+    // Add educational background
+    if (education.length > 0) {
+      const highestEducation = education[0];
+      summaryPoints.push(`Holds a ${highestEducation.degree} from ${highestEducation.school}.`);
+    }
+
+    // Add additional skills and project experience
+    if (skills.length > 3 || projects.length > 0) {
+      const additionalSkills = skills.slice(3).map(skill => skill.label).join(', ');
+      const projectCount = projects.length;
+      summaryPoints.push(`Proficient in ${additionalSkills} with ${projectCount} successful project implementations.`);
+    }
+
+    // Add career objective
+    summaryPoints.push(`Seeking to leverage technical expertise and problem-solving skills in a challenging role.`);
+
+    // Join points into a single summary
+    const generatedSummary = summaryPoints.join(' ');
+
+    // Pass the generated summary back to the parent component
+    onSummaryGenerated(generatedSummary);
+    setIsGenerating(false);
   };
 
   return (
-    <div className="mb-4">
+    <div className="mb-3">
       <button
-        className="btn btn-outline-primary mb-2"
+        type="button"
+        className="btn btn-primary"
         onClick={generateSummary}
-        disabled={isLoading}
+        disabled={isGenerating}
       >
-        {isLoading ? 'Generating...' : 'Generate Professional Summary'}
+        <FaWandMagic className="me-2" />
+        {isGenerating ? 'Generating...' : 'Generate Summary'}
       </button>
-      {error && <div className="text-danger">{error}</div>}
     </div>
   );
 };
