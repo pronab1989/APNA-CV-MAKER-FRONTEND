@@ -40,8 +40,8 @@ const Home = () => {
 
   const handleContactSubmit = (e) => {
     e.preventDefault();
-    const mailtoLink = `mailto:info@boosta.in?subject=${encodeURIComponent(contactForm.subject)}&body=${encodeURIComponent(
-      `Name: ${contactForm.name}\nEmail: ${contactForm.email}\n\n${contactForm.message}`
+    const mailtoLink = `mailto:info@boosta.in?subject=${encodeURIComponent(contactForm.subject || 'Contact from CV Maker')}&body=${encodeURIComponent(
+      `User Email: ${contactForm.email}\n\n${contactForm.message}`
     )}`;
     window.location.href = mailtoLink;
     setShowContactModal(false);
@@ -63,16 +63,23 @@ const Home = () => {
     },
     {
       question: "Can I edit my resume after creating it?",
-      answer: "Yes, you can edit your resume at any time. Just log in to your account and make the necessary changes."
+      answer: "Coming soon! We will notify you."
     },
     {
       question: "Do you offer resume templates?",
-      answer: "Yes, we offer multiple professional templates to choose from. You can select the one that best suits your needs."
+      answer: "Coming soon! We will notify you."
     }
   ];
 
   return (
-    <div className="home-page">
+    <div
+      className="home-page"
+      style={{
+        minHeight: '100vh',
+        background: `linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%), url('/Bg-home.jpg') no-repeat center center fixed`,
+        backgroundSize: 'cover',
+      }}
+    >
       {/* Header */}
       <header className="header">
         <div className="container">
@@ -89,7 +96,7 @@ const Home = () => {
               <p className="hero-description">Stand out from the crowd with a professionally designed resume that highlights your skills and experience.</p>
               <button 
                 className="btn btn-primary btn-lg me-3"
-                onClick={() => navigate('/form')}
+                onClick={() => navigate('/auth')}
               >
                 Create Resume <FaArrowRight className="ms-2" />
               </button>
@@ -116,29 +123,42 @@ const Home = () => {
         <div className="container">
           <h2 className="section-title">Choose Your Professional Template</h2>
           <div className="row">
-            {templates.map((template) => (
-              <div className="col-md-4 mb-4" key={template.id}>
-                <div className="template-card">
-                  <div className="template-preview">
-                    <img 
-                      src={template.image} 
-                      alt={template.name}
-                      className="template-image"
-                    />
-                  </div>
-                  <div className="template-info">
-                    <h3 className="template-title">{template.name}</h3>
-                    <p className="template-description">{template.description}</p>
-                    <button 
-                      className="btn btn-primary w-100"
-                      onClick={() => handleTemplateSelect(template)}
-                    >
-                      Use This Template
-                    </button>
-                  </div>
+            <div className="col-md-4 mb-4">
+              <div className="template-card">
+                <div className="template-preview">
+                  <img src="/classic-template.jpg" alt="Professional Classic" className="template-image" />
+                </div>
+                <div className="template-info">
+                  <div className="template-title">Professional Classic</div>
+                  <div className="template-description">Clean and traditional design perfect for all industries</div>
+                  <button className="btn btn-primary w-100">Use This Template</button>
                 </div>
               </div>
-            ))}
+            </div>
+            <div className="col-md-4 mb-4">
+              <div className="template-card">
+                <div className="template-preview">
+                  <img src="/modern-template.jpg" alt="Modern Creative" className="template-image" />
+                </div>
+                <div className="template-info">
+                  <div className="template-title">Modern Creative</div>
+                  <div className="template-description">Contemporary design with creative elements</div>
+                  <button className="btn btn-primary w-100">Use This Template</button>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4 mb-4">
+              <div className="template-card">
+                <div className="template-preview">
+                  <img src="/minimalist-template.jpg" alt="Minimalist" className="template-image" />
+                </div>
+                <div className="template-info">
+                  <div className="template-title">Minimalist</div>
+                  <div className="template-description">Simple and elegant design focusing on content</div>
+                  <button className="btn btn-primary w-100">Use This Template</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -191,17 +211,7 @@ const Home = () => {
               <div className="modal-body">
                 <form onSubmit={handleContactSubmit}>
                   <div className="mb-3">
-                    <label className="form-label">Name</label>
-                    <input 
-                      type="text" 
-                      className="form-control" 
-                      value={contactForm.name}
-                      onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Email</label>
+                    <label className="form-label">Your Email</label>
                     <input 
                       type="email" 
                       className="form-control" 
@@ -211,13 +221,12 @@ const Home = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label className="form-label">Subject</label>
+                    <label className="form-label">Subject (optional)</label>
                     <input 
                       type="text" 
                       className="form-control" 
                       value={contactForm.subject}
                       onChange={(e) => setContactForm({...contactForm, subject: e.target.value})}
-                      required
                     />
                   </div>
                   <div className="mb-3">
@@ -230,7 +239,7 @@ const Home = () => {
                       required
                     ></textarea>
                   </div>
-                  <button type="submit" className="btn btn-primary">Send Message</button>
+                  <button type="submit" className="btn btn-primary">Send Email</button>
                 </form>
               </div>
             </div>
