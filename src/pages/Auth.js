@@ -10,7 +10,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.REACT_APP_API_URL || 'https://apna-cv-maker-server.onrender.com/api';
 
   const handleLogin = async (e) => {
     e.preventDefault();
