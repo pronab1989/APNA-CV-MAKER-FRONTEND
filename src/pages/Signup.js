@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +12,8 @@ function Signup() {
 
   const [error, setError] = useState('');
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -22,7 +23,7 @@ function Signup() {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/signup', formData);
+      const res = await axios.post(`${API_URL}/auth/signup`, formData);
       alert(res.data.message);
       navigate('/login');
     } catch (err) {

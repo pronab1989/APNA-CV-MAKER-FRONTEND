@@ -10,6 +10,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,7 +22,7 @@ const Auth = () => {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await axios.post(`${API_URL}/auth/login`, {
         email: loginData.email,
         password: loginData.password
       });
@@ -49,7 +50,7 @@ const Auth = () => {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/signup', {
+      const response = await axios.post(`${API_URL}/auth/signup`, {
         email: signupData.email,
         password: signupData.password
       });
