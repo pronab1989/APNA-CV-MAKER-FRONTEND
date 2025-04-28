@@ -490,6 +490,8 @@ const [socialLinks, setSocialLinks] = useState({
     }
   }, []);
 
+  const API_URL = process.env.REACT_APP_API_URL || 'https://apna-cv-maker-server.onrender.com/api';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -559,7 +561,7 @@ const [socialLinks, setSocialLinks] = useState({
   
     try {
       // Save to database
-      const response = await axios.post('http://localhost:5000/api/resume', formData);
+      const response = await axios.post(`${API_URL}/resume`, formData);
       
       if (response.status === 200) {
         // Navigate to preview page with the form data
