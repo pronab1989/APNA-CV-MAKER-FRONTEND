@@ -13,31 +13,6 @@ const Home = () => {
     message: ''
   });
 
-  const templates = [
-    {
-      id: 1,
-      name: 'Professional Classic',
-      description: 'Clean and traditional design perfect for all industries',
-      image: '/templates/classic.png'
-    },
-    {
-      id: 2,
-      name: 'Modern Creative',
-      description: 'Contemporary design with creative elements',
-      image: '/templates/modern.png'
-    },
-    {
-      id: 3,
-      name: 'Minimalist',
-      description: 'Simple and elegant design focusing on content',
-      image: '/templates/minimal.png'
-    }
-  ];
-
-  const handleTemplateSelect = (template) => {
-    navigate('/form', { state: { template } });
-  };
-
   const handleContactSubmit = (e) => {
     e.preventDefault();
     const mailtoLink = `mailto:info@boosta.in?subject=${encodeURIComponent(contactForm.subject || 'Contact from CV Maker')}&body=${encodeURIComponent(
