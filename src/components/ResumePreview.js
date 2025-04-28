@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ResumePDFView from './ResumePDFView';
 
 const ResumePreview = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { formData, resumeId } = location.state || {};
+  const { formData } = location.state || {};
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [isPaymentSuccess, setIsPaymentSuccess] = useState(false);
 
@@ -23,22 +22,6 @@ const ResumePreview = () => {
         </button>
       </div>
     );
-  }
-
-  const formatDate = (date) => {
-    if (!date) return 'Present';
-    return date instanceof Date
-      ? date.toLocaleDateString()
-      : new Date(date).toLocaleDateString();
-  };
-
-  function formatDateDMY(date) {
-    if (!date) return '';
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}/${month}/${year}`;
   }
 
   const generatePDF = async () => {
@@ -75,14 +58,38 @@ const ResumePreview = () => {
     }
   };
 
+  // Helper to dynamically load Razorpay script
+  function loadRazorpayScript(src) {
+    return new Promise((resolve) => {
+      if (document.querySelector(`script[src='${src}']`)) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  }
+
   // Razorpay payment handler
-  const handleRazorpayPayment = () => {
+  const handleRazorpayPayment = async () => {
+    const res = await loadRazorpayScript('https://checkout.razorpay.com/v1/checkout.js');
+    if (!res) {
+      alert('Razorpay SDK failed to load. Are you online?');
+      return;
+    }
     const options = {
-      key: 'rzp_test_3uGujCsLHHfkvt', // Updated with your Razorpay test key
+      key: 'rzp_test_3uGujCsLHHfkvt',
       amount: 2700, // 27 INR in paise
       currency: 'INR',
       name: 'Buy me a coffee',
-      description: 'Please appreciate my work, buy a cup of coffee for me',
+      description: 'Ready for your new career adventure? If you appreciate my effort, buy me a coffee and help me keep building great tools! ☕',
       handler: function (response) {
         setShowPaymentModal(false);
         setIsPaymentSuccess(true);
