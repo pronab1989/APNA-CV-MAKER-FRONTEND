@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { FaEnvelope, FaArrowRight } from 'react-icons/fa6';
 import Footer from '../components/Footer';
 import './Home.css'; // Import the CSS file
+import Navbar from '../components/Navbar';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -56,6 +57,14 @@ const Home = () => {
         backgroundSize: 'cover',
       }}
     >
+      <Navbar />
+      {/* Top Banner Ad */}
+      <div className="container mt-3 mb-4">
+        <div className="ad-container" style={{ height: '90px', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #dee2e6', borderRadius: '4px' }}>
+          <span>Advertisement</span>
+        </div>
+      </div>
+
       {/* Header */}
       <header className="header">
         <div className="container">
@@ -147,35 +156,51 @@ const Home = () => {
         </div>
       </div>
 
-      {/* FAQ Section */}
-      <div className="faq-section py-5 bg-light">
-        <div className="container">
-          <h2 className="text-center mb-5">Frequently Asked Questions</h2>
-          <div className="accordion" id="faqAccordion">
-            {faqs.map((faq, index) => (
-              <div className="accordion-item" key={index}>
-                <h3 className="accordion-header">
-                  <button 
-                    className="accordion-button collapsed" 
-                    type="button" 
-                    data-bs-toggle="collapse" 
-                    data-bs-target={`#faq${index}`}
-                  >
-                    {faq.question}
-                  </button>
-                </h3>
-                <div 
-                  id={`faq${index}`} 
-                  className="accordion-collapse collapse" 
-                  data-bs-parent="#faqAccordion"
-                >
-                  <div className="accordion-body">
-                    {faq.answer}
+      {/* FAQ Section with Sidebar Ad */}
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8">
+            <div className="faq-section">
+              <h2 className="text-center mb-5">Frequently Asked Questions</h2>
+              <div className="accordion" id="faqAccordion">
+                {faqs.map((faq, index) => (
+                  <div className="accordion-item" key={index}>
+                    <h3 className="accordion-header">
+                      <button 
+                        className="accordion-button collapsed" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target={`#faq${index}`}
+                      >
+                        {faq.question}
+                      </button>
+                    </h3>
+                    <div 
+                      id={`faq${index}`} 
+                      className="accordion-collapse collapse" 
+                      data-bs-parent="#faqAccordion"
+                    >
+                      <div className="accordion-body">
+                        {faq.answer}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
+          <div className="col-md-4">
+            <div className="ad-container" style={{ height: '600px', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #dee2e6', borderRadius: '4px', position: 'sticky', top: '20px' }}>
+              <span>Advertisement</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Banner Ad */}
+      <div className="container mt-4 mb-4">
+        <div className="ad-container" style={{ height: '90px', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #dee2e6', borderRadius: '4px' }}>
+          <span>Advertisement</span>
         </div>
       </div>
 

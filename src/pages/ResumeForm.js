@@ -582,564 +582,577 @@ const [socialLinks, setSocialLinks] = useState({
   
   
   return (
-    <div className="resume-form-bg">
-      <div className="resume-form-card">
-        {/* Home Button */}
-        <div className="mb-3">
-          <button
-            type="button"
-            className="btn btn-outline-primary"
-            onClick={() => navigate('/')}
-          >
-            Home
-          </button>
-        </div>
-        <form onSubmit={handleSubmit}>
-      {/* === Personal Details Section === */}
-          <h3 className="resume-section-title">Personal Details</h3>
+    <div className="container">
       <div className="row">
-        <div className="col-md-6 my-2">
-          <label>First Name</label>
-          <input className="form-control"
-  name="firstName"
-  value={firstName}
-  onChange={(e) => setFirstName(e.target.value)} />
-        </div>
-        <div className="col-md-6 my-2">
-          <label>Last Name</label>
-          <input className="form-control"
-  name="lastName"
-  value={lastName}
-  onChange={(e) => setLastName(e.target.value)} />
-        </div>
-        <div className="col-md-6 my-2">
-          <label>Date of Birth</label><br />
-          <DatePicker
-            selected={dob}
-            onChange={(date) => setDob(date)}
-            className="form-control"
-            dateFormat="dd/MM/yyyy"
-            placeholderText="dd/mm/yyyy"
-            showMonthDropdown
-            showYearDropdown
-            dropdownMode="select"
-            autoComplete="off"
-            isClearable
-            customInput={
-              <input
-                type="text"
-                className="form-control"
-                value={dob ? dob.toLocaleDateString('en-GB') : ''}
-                onChange={e => {
-                  const value = e.target.value;
-                  const [day, month, year] = value.split('/');
-                  if (day && month && year && day.length === 2 && month.length === 2 && year.length === 4) {
-                    const parsed = new Date(`${year}-${month}-${day}`);
-                    if (!isNaN(parsed)) setDob(parsed);
-                  } else if (value === '') {
-                    setDob(null);
-                  }
-                }}
-                placeholder="dd/mm/yyyy"
-                autoComplete="off"
-              />
-            }
-          />
-        </div>
+        <div className="col-md-8">
+          <div className="resume-form-card">
+            <div className="resume-form-bg">
+              <div className="resume-form-card">
+                {/* Home Button */}
+                <div className="mb-3">
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary"
+                    onClick={() => navigate('/')}
+                  >
+                    Home
+                  </button>
+                </div>
+                <form onSubmit={handleSubmit}>
+                  {/* === Personal Details Section === */}
+                  <h3 className="resume-section-title">Personal Details</h3>
+                  <div className="row">
+                    <div className="col-md-6 my-2">
+                      <label>First Name</label>
+                      <input className="form-control"
+                        name="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)} />
+                    </div>
+                    <div className="col-md-6 my-2">
+                      <label>Last Name</label>
+                      <input className="form-control"
+                        name="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)} />
+                    </div>
+                    <div className="col-md-6 my-2">
+                      <label>Date of Birth</label><br />
+                      <DatePicker
+                        selected={dob}
+                        onChange={(date) => setDob(date)}
+                        className="form-control"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="dd/mm/yyyy"
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
+                        autoComplete="off"
+                        isClearable
+                        customInput={
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={dob ? dob.toLocaleDateString('en-GB') : ''}
+                            onChange={e => {
+                              const value = e.target.value;
+                              const [day, month, year] = value.split('/');
+                              if (day && month && year && day.length === 2 && month.length === 2 && year.length === 4) {
+                                const parsed = new Date(`${year}-${month}-${day}`);
+                                if (!isNaN(parsed)) setDob(parsed);
+                              } else if (value === '') {
+                                setDob(null);
+                              }
+                            }}
+                            placeholder="dd/mm/yyyy"
+                            autoComplete="off"
+                          />
+                        }
+                      />
+                    </div>
 
-        {phones.map((phone, idx) => (
-          <div className="col-md-6 my-2" key={idx}>
-            <label>Phone {idx + 1}</label>
-                  <input 
-                    className="form-control" 
-                    name={`phone-${idx}`}
-                    value={phone}
-                    onChange={(e) => {
-                      const updatedPhones = [...phones];
-                      updatedPhones[idx] = e.target.value;
-                      setPhones(updatedPhones);
-                    }}
-                  />
-          </div>
-        ))}
-        <div className="col-md-12 mb-2">
-                <button 
-                  type="button" 
-                  onClick={addPhone} 
-                  className="btn btn-sm btn-primary me-2"
-                >
-                  + Add Phone
-                </button>
-                <button 
-                  type="button" 
-                  onClick={addEmail} 
-                  className="btn btn-sm btn-primary"
-                >
-                  + Add Email
-                </button>
-        </div>
+                    {phones.map((phone, idx) => (
+                      <div className="col-md-6 my-2" key={idx}>
+                        <label>Phone {idx + 1}</label>
+                        <input 
+                          className="form-control" 
+                          name={`phone-${idx}`}
+                          value={phone}
+                          onChange={(e) => {
+                            const updatedPhones = [...phones];
+                            updatedPhones[idx] = e.target.value;
+                            setPhones(updatedPhones);
+                          }}
+                        />
+                      </div>
+                    ))}
+                    <div className="col-md-12 mb-2">
+                      <button 
+                        type="button" 
+                        onClick={addPhone} 
+                        className="btn btn-sm btn-primary me-2"
+                      >
+                        + Add Phone
+                      </button>
+                      <button 
+                        type="button" 
+                        onClick={addEmail} 
+                        className="btn btn-sm btn-primary"
+                      >
+                        + Add Email
+                      </button>
+                    </div>
 
-        {emails.map((email, idx) => (
-          <div className="col-md-6 my-2" key={idx}>
-            <label>Email {idx + 1}</label>
-                  <input 
-                    className="form-control" 
-                    name={`email-${idx}`}
-                    value={email}
-                    onChange={(e) => {
-                      const updatedEmails = [...emails];
-                      updatedEmails[idx] = e.target.value;
-                      setEmails(updatedEmails);
-                    }}
-                  />
-          </div>
-        ))}
+                    {emails.map((email, idx) => (
+                      <div className="col-md-6 my-2" key={idx}>
+                        <label>Email {idx + 1}</label>
+                        <input 
+                          className="form-control" 
+                          name={`email-${idx}`}
+                          value={email}
+                          onChange={(e) => {
+                            const updatedEmails = [...emails];
+                            updatedEmails[idx] = e.target.value;
+                            setEmails(updatedEmails);
+                          }}
+                        />
+                      </div>
+                    ))}
 
-        <div className="col-md-4 my-2">
-          <label>City</label>
-          <input className="form-control" name="city" />
-        </div>
-        <div className="col-md-4 my-2">
-          <label>State</label>
-                <Select options={stateOptions} onChange={selected => setState(selected ? selected.value : '')} />
-        </div>
-        <div className="col-md-4 my-2">
-          <label>PIN Code</label>
-                <input className="form-control" name="pin" value={pin} onChange={(e) => setPin(e.target.value)} />
-        </div>
-        <div className="col-md-6 my-2">
-          <label>Country</label>
-                <Select options={countryOptions} value={countryOptions.find(opt => opt.value === country) || null} onChange={selected => setCountry(selected ? selected.value : '')} />
+                    <div className="col-md-4 my-2">
+                      <label>City</label>
+                      <input className="form-control" name="city" />
+                    </div>
+                    <div className="col-md-4 my-2">
+                      <label>State</label>
+                      <Select options={stateOptions} onChange={selected => setState(selected ? selected.value : '')} />
+                    </div>
+                    <div className="col-md-4 my-2">
+                      <label>PIN Code</label>
+                      <input className="form-control" name="pin" value={pin} onChange={(e) => setPin(e.target.value)} />
+                    </div>
+                    <div className="col-md-6 my-2">
+                      <label>Country</label>
+                      <Select options={countryOptions} value={countryOptions.find(opt => opt.value === country) || null} onChange={selected => setCountry(selected ? selected.value : '')} />
+                    </div>
+                  </div>
+
+                  {/* === Social Media Links Section === */}
+                  <hr className="resume-divider" />
+                  <h3 className="resume-section-title mt-4">Social Media Links</h3>
+                  <div className="row">
+                    <div className="col-md-6 my-2">
+                      <label>GitHub</label>
+                      <input
+                        className="form-control"
+                        placeholder="https://github.com/yourname"
+                        value={socialLinks.github}
+                        onChange={(e) => handleSocialChange('github', e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-6 my-2">
+                      <label>LinkedIn</label>
+                      <input
+                        className="form-control"
+                        placeholder="https://linkedin.com/in/yourname"
+                        value={socialLinks.linkedin}
+                        onChange={(e) => handleSocialChange('linkedin', e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-6 my-2">
+                      <label>Portfolio Website</label>
+                      <input
+                        className="form-control"
+                        placeholder="https://yourportfolio.com"
+                        value={socialLinks.portfolio}
+                        onChange={(e) => handleSocialChange('portfolio', e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-6 my-2">
+                      <label>Twitter</label>
+                      <input
+                        className="form-control"
+                        placeholder="https://twitter.com/yourhandle"
+                        value={socialLinks.twitter}
+                        onChange={(e) => handleSocialChange('twitter', e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  {/* === Education Section === */}
+                  <hr className="resume-divider" />
+                  <h3 className="resume-section-title mt-4">Education</h3>
+                  {educationList.map((edu, idx) => (
+                    <div className="row" key={idx}>
+                      <div className="col-md-4 my-2">
+                        <label>School/College</label>
+                        <input
+                          className="form-control"
+                          value={edu.school}
+                          onChange={(e) => handleEduChange(idx, 'school', e.target.value)}
+                        />
+                      </div>
+                      <div className="col-md-4 my-2">
+                        <label>Degree</label>
+                        <Select
+                          options={degreeOptions}
+                          onChange={(selected) => handleEduChange(idx, 'degree', selected.value)}
+                        />
+                      </div>
+                      <div className="col-md-4 my-2">
+                        <label>Passing Year</label>
+                        <Select
+                          options={yearOptions}
+                          onChange={(selected) => handleEduChange(idx, 'passingYear', selected.value)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <div className="my-3">
+                    <button 
+                      type="button" 
+                      onClick={addEducation} 
+                      className="btn btn-sm btn-outline-primary"
+                    >
+                      + Add More Education
+                    </button>
+                  </div>
+
+                  {/* === Experience Section === */}
+                  <hr className="resume-divider" />
+                  <h3 className="resume-section-title mt-4">Professional Information</h3>
+                  {experienceList.map((exp, idx) => (
+                    <div className="row" key={idx}>
+                      <div className="col-md-4 my-2">
+                        <label>Company Name</label>
+                        <input
+                          className="form-control"
+                          value={exp.company}
+                          onChange={(e) => handleExperienceChange(idx, 'company', e.target.value)}
+                        />
+                      </div>
+                      <div className="col-md-4 my-2">
+                        <label>Role</label>
+                        <CreatableSelect
+                          options={roleOptions}
+                          value={exp.role ? { value: exp.role, label: exp.roleLabel || exp.role } : null}
+                          onChange={(selected) => handleExperienceChange(idx, 'role', selected)}
+                          placeholder="Select or type to search role"
+                          isSearchable={true}
+                          className="basic-select"
+                          classNamePrefix="select"
+                        />
+                      </div>
+                      <div className="col-md-2 my-2">
+                        <label>Start Date</label><br />
+                        <DatePicker
+                          selected={exp.startDate}
+                          onChange={(date) => handleExperienceChange(idx, 'startDate', date)}
+                          className="form-control"
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText="dd/mm/yyyy"
+                          showMonthDropdown
+                          showYearDropdown
+                          dropdownMode="select"
+                          autoComplete="off"
+                          isClearable
+                          customInput={
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={exp.startDate ? new Date(exp.startDate).toLocaleDateString('en-GB') : ''}
+                              onChange={e => {
+                                const value = e.target.value;
+                                const [day, month, year] = value.split('/');
+                                if (day && month && year && day.length === 2 && month.length === 2 && year.length === 4) {
+                                  const parsed = new Date(`${year}-${month}-${day}`);
+                                  if (!isNaN(parsed)) handleExperienceChange(idx, 'startDate', parsed);
+                                } else if (value === '') {
+                                  handleExperienceChange(idx, 'startDate', null);
+                                }
+                              }}
+                              placeholder="dd/mm/yyyy"
+                              autoComplete="off"
+                            />
+                          }
+                        />
+                      </div>
+                      <div className="col-md-2 my-2">
+                        <label>End Date</label><br />
+                        <DatePicker
+                          selected={exp.endDate}
+                          onChange={(date) => handleExperienceChange(idx, 'endDate', date)}
+                          className="form-control"
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText="dd/mm/yyyy"
+                          showMonthDropdown
+                          showYearDropdown
+                          dropdownMode="select"
+                          autoComplete="off"
+                          isClearable
+                          customInput={
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={exp.endDate ? new Date(exp.endDate).toLocaleDateString('en-GB') : ''}
+                              onChange={e => {
+                                const value = e.target.value;
+                                const [day, month, year] = value.split('/');
+                                if (day && month && year && day.length === 2 && month.length === 2 && year.length === 4) {
+                                  const parsed = new Date(`${year}-${month}-${day}`);
+                                  if (!isNaN(parsed)) handleExperienceChange(idx, 'endDate', parsed);
+                                } else if (value === '') {
+                                  handleExperienceChange(idx, 'endDate', null);
+                                }
+                              }}
+                              placeholder="dd/mm/yyyy"
+                              autoComplete="off"
+                            />
+                          }
+                        />
+                      </div>
+                      <div className="col-md-12 my-2">
+                        <label>Responsibilities</label>
+                        <input
+                          className="form-control"
+                          value={exp.responsibilities}
+                          onChange={(e) => handleExperienceChange(idx, 'responsibilities', e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <div className="mb-3">
+                    <button 
+                      type="button" 
+                      onClick={addExperience} 
+                      className="btn btn-sm btn-outline-primary"
+                    >
+                      + Add More Experience
+                    </button>
+                  </div>
+
+                  {/* === Current Job Section === */}
+                  <h5 className="resume-section-title mt-4">Current Company</h5>
+                  <div className="row">
+                    <div className="col-md-4 my-2">
+                      <label>Company Name</label>
+                      <input
+                        className="form-control"
+                        value={currentJob.company}
+                        onChange={(e) => setCurrentJob({ ...currentJob, company: e.target.value })}
+                      />
+                    </div>
+                    <div className="col-md-4 my-2">
+                      <label>Role</label>
+                      <CreatableSelect
+                        options={roleOptions}
+                        value={currentJob.role ? { value: currentJob.role, label: currentJob.roleLabel || currentJob.role } : null}
+                        onChange={(selected) => setCurrentJob({ 
+                          ...currentJob, 
+                          role: selected.value,
+                          roleLabel: selected.label 
+                        })}
+                        placeholder="Select or type to search role"
+                        isSearchable={true}
+                        className="basic-select"
+                        classNamePrefix="select"
+                      />
+                    </div>
+                    <div className="col-md-4 my-2">
+                      <label>Start Date</label><br />
+                      <DatePicker
+                        selected={currentJob.startDate}
+                        onChange={(date) => setCurrentJob({ ...currentJob, startDate: date })}
+                        className="form-control"
+                      />
+                    </div>
+                    <div className="col-md-12">
+                      <div className="form-check mt-2">
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          checked={currentJob.isWorking}
+                          onChange={(e) => setCurrentJob({ ...currentJob, isWorking: e.target.checked })}
+                          id="workingNow"
+                        />
+                        <label className="form-check-label" htmlFor="workingNow">Still Working Here</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* === Skills Section === */}
+                  <hr className="resume-divider" />
+                  <h3 className="resume-section-title mt-4">Skills</h3>
+                  <div className="row">
+                    <div className="col-md-6 my-2">
+                      <label>Technical Skills</label>
+                      <CreatableSelect
+                        options={technicalSkillOptions}
+                        isMulti
+                        value={technicalSkills}
+                        onChange={(selected) => setTechnicalSkills(selected)}
+                        placeholder="Select or type technical skills"
+                      />
+                    </div>
+                    <div className="col-md-6 my-2">
+                      <label>Non-Technical Skills</label>
+                      <CreatableSelect
+                        options={nonTechnicalSkillOptions}
+                        isMulti
+                        value={nonTechnicalSkills}
+                        onChange={(selected) => setNonTechnicalSkills(selected)}
+                        placeholder="Select or type soft skills"
+                      />
+                    </div>
+                  </div>
+
+                  {/* === Projects Section === */}
+                  <hr className="resume-divider" />
+                  <h3 className="resume-section-title mt-4">Projects</h3>
+                  {projects.map((proj, idx) => (
+                    <div className="row" key={idx}>
+                      <div className="col-md-4 my-2">
+                        <label>Project Title</label>
+                        <input
+                          className="form-control"
+                          value={proj.title}
+                          onChange={(e) => handleProjectChange(idx, 'title', e.target.value)}
+                        />
+                      </div>
+                      <div className="col-md-4 my-2">
+                        <label>Technologies Used</label>
+                        <input
+                          className="form-control"
+                          placeholder="e.g., React, Node.js"
+                          value={proj.technologies}
+                          onChange={(e) => handleProjectChange(idx, 'technologies', e.target.value)}
+                        />
+                      </div>
+                      <div className="col-md-4 my-2">
+                        <label>Description</label>
+                        <input
+                          className="form-control"
+                          placeholder="Short project summary"
+                          value={proj.description}
+                          onChange={(e) => handleProjectChange(idx, 'description', e.target.value)}
+                        />
+                      </div>
+                      <div className="col-md-2 my-2">
+                        <label>Start Date</label><br />
+                        <DatePicker
+                          selected={proj.startDate}
+                          onChange={(date) => handleProjectChange(idx, 'startDate', date)}
+                          className="form-control"
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText="dd/mm/yyyy"
+                          showMonthDropdown
+                          showYearDropdown
+                          dropdownMode="select"
+                          autoComplete="off"
+                          isClearable
+                          customInput={
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={proj.startDate ? new Date(proj.startDate).toLocaleDateString('en-GB') : ''}
+                              onChange={e => {
+                                const value = e.target.value;
+                                const [day, month, year] = value.split('/');
+                                if (day && month && year && day.length === 2 && month.length === 2 && year.length === 4) {
+                                  const parsed = new Date(`${year}-${month}-${day}`);
+                                  if (!isNaN(parsed)) handleProjectChange(idx, 'startDate', parsed);
+                                } else if (value === '') {
+                                  handleProjectChange(idx, 'startDate', null);
+                                }
+                              }}
+                              placeholder="dd/mm/yyyy"
+                              autoComplete="off"
+                            />
+                          }
+                        />
+                      </div>
+                      <div className="col-md-2 my-2">
+                        <label>End Date</label><br />
+                        <DatePicker
+                          selected={proj.endDate}
+                          onChange={(date) => handleProjectChange(idx, 'endDate', date)}
+                          className="form-control"
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText="dd/mm/yyyy"
+                          showMonthDropdown
+                          showYearDropdown
+                          dropdownMode="select"
+                          autoComplete="off"
+                          isClearable
+                          customInput={
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={proj.endDate ? new Date(proj.endDate).toLocaleDateString('en-GB') : ''}
+                              onChange={e => {
+                                const value = e.target.value;
+                                const [day, month, year] = value.split('/');
+                                if (day && month && year && day.length === 2 && month.length === 2 && year.length === 4) {
+                                  const parsed = new Date(`${year}-${month}-${day}`);
+                                  if (!isNaN(parsed)) handleProjectChange(idx, 'endDate', parsed);
+                                } else if (value === '') {
+                                  handleProjectChange(idx, 'endDate', null);
+                                }
+                              }}
+                              placeholder="dd/mm/yyyy"
+                              autoComplete="off"
+                            />
+                          }
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="my-3">
+                    <button 
+                      type="button" 
+                      onClick={addProject} 
+                      className="btn btn-sm btn-outline-primary"
+                    >
+                      + Add More Projects
+                    </button>
+                  </div>
+
+                  {/* === Hobbies Section */}
+                  <hr className="resume-divider" />
+                  <h3 className="resume-section-title mt-4">Hobbies</h3>
+                  <div className="row">
+                    <div className="col-12">
+                      <Select
+                        options={hobbyOptions}
+                        isMulti
+                        value={hobbies}
+                        onChange={(selected) => setHobbies(selected)}
+                        placeholder="Select your hobbies"
+                        className="mb-3"
+                      />
+                    </div>
+                  </div>
+
+                  {/* === Summary Section */}
+                  <div className="row">
+                    <div className="col-12 my-2">
+                      <h3 className="resume-section-title">Professional Summary</h3>
+                      <SummaryGenerator 
+                        formData={{
+                          experienceList,
+                          currentJob,
+                          technicalSkills,
+                          nonTechnicalSkills,
+                          educationList,
+                          projects
+                        }}
+                        onSummaryGenerated={handleSummaryGenerated}
+                      />
+                      <textarea
+                        className="form-control"
+                        rows="5"
+                        value={summary}
+                        onChange={(e) => setSummary(e.target.value)}
+                        placeholder="Write a brief summary of your professional experience and skills..."
+                      />
+                    </div>
+                  </div>
+                  <div className="text-center mt-4 mb-5">
+                    <button type="submit" className="btn btn-success resume-form-btn">Submit</button>
+                  </div>
+                </form>
               </div>
             </div>
-
-            {/* === Social Media Links Section === */}
-            <hr className="resume-divider" />
-            <h3 className="resume-section-title mt-4">Social Media Links</h3>
-            <div className="row">
-              <div className="col-md-6 my-2">
-                <label>GitHub</label>
-                <input
-                  className="form-control"
-                  placeholder="https://github.com/yourname"
-                  value={socialLinks.github}
-                  onChange={(e) => handleSocialChange('github', e.target.value)}
-                />
-              </div>
-              <div className="col-md-6 my-2">
-                <label>LinkedIn</label>
-                <input
-                  className="form-control"
-                  placeholder="https://linkedin.com/in/yourname"
-                  value={socialLinks.linkedin}
-                  onChange={(e) => handleSocialChange('linkedin', e.target.value)}
-                />
-              </div>
-              <div className="col-md-6 my-2">
-                <label>Portfolio Website</label>
-                <input
-                  className="form-control"
-                  placeholder="https://yourportfolio.com"
-                  value={socialLinks.portfolio}
-                  onChange={(e) => handleSocialChange('portfolio', e.target.value)}
-                />
-              </div>
-              <div className="col-md-6 my-2">
-                <label>Twitter</label>
-                <input
-                  className="form-control"
-                  placeholder="https://twitter.com/yourhandle"
-                  value={socialLinks.twitter}
-                  onChange={(e) => handleSocialChange('twitter', e.target.value)}
-                />
-        </div>
-      </div>
-
-      {/* === Education Section === */}
-          <hr className="resume-divider" />
-          <h3 className="resume-section-title mt-4">Education</h3>
-      {educationList.map((edu, idx) => (
-        <div className="row" key={idx}>
-          <div className="col-md-4 my-2">
-            <label>School/College</label>
-            <input
-              className="form-control"
-              value={edu.school}
-              onChange={(e) => handleEduChange(idx, 'school', e.target.value)}
-            />
-          </div>
-          <div className="col-md-4 my-2">
-            <label>Degree</label>
-            <Select
-              options={degreeOptions}
-              onChange={(selected) => handleEduChange(idx, 'degree', selected.value)}
-            />
-          </div>
-          <div className="col-md-4 my-2">
-            <label>Passing Year</label>
-            <Select
-              options={yearOptions}
-              onChange={(selected) => handleEduChange(idx, 'passingYear', selected.value)}
-            />
           </div>
         </div>
-      ))}
-      <div className="my-3">
-              <button 
-                type="button" 
-                onClick={addEducation} 
-                className="btn btn-sm btn-outline-primary"
-              >
-          + Add More Education
-        </button>
-      </div>
-
-      {/* === Experience Section === */}
-          <hr className="resume-divider" />
-          <h3 className="resume-section-title mt-4">Professional Information</h3>
-      {experienceList.map((exp, idx) => (
-        <div className="row" key={idx}>
-          <div className="col-md-4 my-2">
-            <label>Company Name</label>
-            <input
-              className="form-control"
-              value={exp.company}
-              onChange={(e) => handleExperienceChange(idx, 'company', e.target.value)}
-            />
-          </div>
-          <div className="col-md-4 my-2">
-            <label>Role</label>
-                  <CreatableSelect
-                    options={roleOptions}
-                    value={exp.role ? { value: exp.role, label: exp.roleLabel || exp.role } : null}
-                    onChange={(selected) => handleExperienceChange(idx, 'role', selected)}
-                    placeholder="Select or type to search role"
-                    isSearchable={true}
-                    className="basic-select"
-                    classNamePrefix="select"
-            />
-          </div>
-          <div className="col-md-2 my-2">
-            <label>Start Date</label><br />
-            <DatePicker
-              selected={exp.startDate}
-              onChange={(date) => handleExperienceChange(idx, 'startDate', date)}
-              className="form-control"
-              dateFormat="dd/MM/yyyy"
-              placeholderText="dd/mm/yyyy"
-              showMonthDropdown
-              showYearDropdown
-              dropdownMode="select"
-              autoComplete="off"
-              isClearable
-              customInput={
-                <input
-                  type="text"
-                  className="form-control"
-                  value={exp.startDate ? new Date(exp.startDate).toLocaleDateString('en-GB') : ''}
-                  onChange={e => {
-                    const value = e.target.value;
-                    const [day, month, year] = value.split('/');
-                    if (day && month && year && day.length === 2 && month.length === 2 && year.length === 4) {
-                      const parsed = new Date(`${year}-${month}-${day}`);
-                      if (!isNaN(parsed)) handleExperienceChange(idx, 'startDate', parsed);
-                    } else if (value === '') {
-                      handleExperienceChange(idx, 'startDate', null);
-                    }
-                  }}
-                  placeholder="dd/mm/yyyy"
-                  autoComplete="off"
-                />
-              }
-            />
-          </div>
-          <div className="col-md-2 my-2">
-            <label>End Date</label><br />
-            <DatePicker
-              selected={exp.endDate}
-              onChange={(date) => handleExperienceChange(idx, 'endDate', date)}
-              className="form-control"
-              dateFormat="dd/MM/yyyy"
-              placeholderText="dd/mm/yyyy"
-              showMonthDropdown
-              showYearDropdown
-              dropdownMode="select"
-              autoComplete="off"
-              isClearable
-              customInput={
-                <input
-                  type="text"
-                  className="form-control"
-                  value={exp.endDate ? new Date(exp.endDate).toLocaleDateString('en-GB') : ''}
-                  onChange={e => {
-                    const value = e.target.value;
-                    const [day, month, year] = value.split('/');
-                    if (day && month && year && day.length === 2 && month.length === 2 && year.length === 4) {
-                      const parsed = new Date(`${year}-${month}-${day}`);
-                      if (!isNaN(parsed)) handleExperienceChange(idx, 'endDate', parsed);
-                    } else if (value === '') {
-                      handleExperienceChange(idx, 'endDate', null);
-                    }
-                  }}
-                  placeholder="dd/mm/yyyy"
-                  autoComplete="off"
-                />
-              }
-            />
-          </div>
-          <div className="col-md-12 my-2">
-            <label>Responsibilities</label>
-            <input
-              className="form-control"
-              value={exp.responsibilities}
-              onChange={(e) => handleExperienceChange(idx, 'responsibilities', e.target.value)}
-            />
-          </div>
-        </div>
-      ))}
-      <div className="mb-3">
-              <button 
-                type="button" 
-                onClick={addExperience} 
-                className="btn btn-sm btn-outline-primary"
-              >
-          + Add More Experience
-        </button>
-      </div>
-
-      {/* === Current Job Section === */}
-          <h5 className="resume-section-title mt-4">Current Company</h5>
-      <div className="row">
-        <div className="col-md-4 my-2">
-          <label>Company Name</label>
-          <input
-            className="form-control"
-            value={currentJob.company}
-            onChange={(e) => setCurrentJob({ ...currentJob, company: e.target.value })}
-          />
-        </div>
-        <div className="col-md-4 my-2">
-          <label>Role</label>
-                <CreatableSelect
-                  options={roleOptions}
-                  value={currentJob.role ? { value: currentJob.role, label: currentJob.roleLabel || currentJob.role } : null}
-                  onChange={(selected) => setCurrentJob({ 
-                    ...currentJob, 
-                    role: selected.value,
-                    roleLabel: selected.label 
-                  })}
-                  placeholder="Select or type to search role"
-                  isSearchable={true}
-                  className="basic-select"
-                  classNamePrefix="select"
-          />
-        </div>
-        <div className="col-md-4 my-2">
-          <label>Start Date</label><br />
-          <DatePicker
-            selected={currentJob.startDate}
-            onChange={(date) => setCurrentJob({ ...currentJob, startDate: date })}
-            className="form-control"
-          />
-        </div>
-        <div className="col-md-12">
-          <div className="form-check mt-2">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              checked={currentJob.isWorking}
-              onChange={(e) => setCurrentJob({ ...currentJob, isWorking: e.target.checked })}
-              id="workingNow"
-            />
-            <label className="form-check-label" htmlFor="workingNow">Still Working Here</label>
+        <div className="col-md-4">
+          <div className="ad-container" style={{ height: '600px', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #dee2e6', borderRadius: '4px', position: 'sticky', top: '20px' }}>
+            <span>Advertisement</span>
           </div>
         </div>
       </div>
-
-      {/* === Skills Section === */}
-          <hr className="resume-divider" />
-          <h3 className="resume-section-title mt-4">Skills</h3>
-      <div className="row">
-        <div className="col-md-6 my-2">
-          <label>Technical Skills</label>
-              <CreatableSelect
-            options={technicalSkillOptions}
-            isMulti
-                value={technicalSkills}
-            onChange={(selected) => setTechnicalSkills(selected)}
-                placeholder="Select or type technical skills"
-          />
-        </div>
-        <div className="col-md-6 my-2">
-          <label>Non-Technical Skills</label>
-              <CreatableSelect
-            options={nonTechnicalSkillOptions}
-            isMulti
-                value={nonTechnicalSkills}
-            onChange={(selected) => setNonTechnicalSkills(selected)}
-                placeholder="Select or type soft skills"
-          />
-              </div>
-            </div>
-
-            {/* === Projects Section === */}
-            <hr className="resume-divider" />
-            <h3 className="resume-section-title mt-4">Projects</h3>
-{projects.map((proj, idx) => (
-  <div className="row" key={idx}>
-    <div className="col-md-4 my-2">
-      <label>Project Title</label>
-      <input
-        className="form-control"
-        value={proj.title}
-        onChange={(e) => handleProjectChange(idx, 'title', e.target.value)}
-      />
     </div>
-    <div className="col-md-4 my-2">
-      <label>Technologies Used</label>
-      <input
-        className="form-control"
-        placeholder="e.g., React, Node.js"
-        value={proj.technologies}
-        onChange={(e) => handleProjectChange(idx, 'technologies', e.target.value)}
-      />
-    </div>
-    <div className="col-md-4 my-2">
-      <label>Description</label>
-      <input
-        className="form-control"
-        placeholder="Short project summary"
-        value={proj.description}
-        onChange={(e) => handleProjectChange(idx, 'description', e.target.value)}
-      />
-    </div>
-    <div className="col-md-2 my-2">
-      <label>Start Date</label><br />
-      <DatePicker
-        selected={proj.startDate}
-        onChange={(date) => handleProjectChange(idx, 'startDate', date)}
-        className="form-control"
-        dateFormat="dd/MM/yyyy"
-        placeholderText="dd/mm/yyyy"
-        showMonthDropdown
-        showYearDropdown
-        dropdownMode="select"
-        autoComplete="off"
-        isClearable
-        customInput={
-          <input
-            type="text"
-            className="form-control"
-            value={proj.startDate ? new Date(proj.startDate).toLocaleDateString('en-GB') : ''}
-            onChange={e => {
-              const value = e.target.value;
-              const [day, month, year] = value.split('/');
-              if (day && month && year && day.length === 2 && month.length === 2 && year.length === 4) {
-                const parsed = new Date(`${year}-${month}-${day}`);
-                if (!isNaN(parsed)) handleProjectChange(idx, 'startDate', parsed);
-              } else if (value === '') {
-                handleProjectChange(idx, 'startDate', null);
-              }
-            }}
-            placeholder="dd/mm/yyyy"
-            autoComplete="off"
-          />
-        }
-      />
-    </div>
-    <div className="col-md-2 my-2">
-      <label>End Date</label><br />
-      <DatePicker
-        selected={proj.endDate}
-        onChange={(date) => handleProjectChange(idx, 'endDate', date)}
-        className="form-control"
-        dateFormat="dd/MM/yyyy"
-        placeholderText="dd/mm/yyyy"
-        showMonthDropdown
-        showYearDropdown
-        dropdownMode="select"
-        autoComplete="off"
-        isClearable
-        customInput={
-          <input
-            type="text"
-            className="form-control"
-            value={proj.endDate ? new Date(proj.endDate).toLocaleDateString('en-GB') : ''}
-            onChange={e => {
-              const value = e.target.value;
-              const [day, month, year] = value.split('/');
-              if (day && month && year && day.length === 2 && month.length === 2 && year.length === 4) {
-                const parsed = new Date(`${year}-${month}-${day}`);
-                if (!isNaN(parsed)) handleProjectChange(idx, 'endDate', parsed);
-              } else if (value === '') {
-                handleProjectChange(idx, 'endDate', null);
-              }
-            }}
-            placeholder="dd/mm/yyyy"
-            autoComplete="off"
-          />
-        }
-      />
-    </div>
-  </div>
-))}
-
-<div className="my-3">
-              <button 
-                type="button" 
-                onClick={addProject} 
-                className="btn btn-sm btn-outline-primary"
-              >
-    + Add More Projects
-  </button>
-</div>
-
-            {/* === Hobbies Section */}
-            <hr className="resume-divider" />
-            <h3 className="resume-section-title mt-4">Hobbies</h3>
-<div className="row">
-              <div className="col-12">
-                <Select
-                  options={hobbyOptions}
-                  isMulti
-                  value={hobbies}
-                  onChange={(selected) => setHobbies(selected)}
-                  placeholder="Select your hobbies"
-                  className="mb-3"
-    />
-  </div>
-  </div>
-
-            {/* === Summary Section */}
-            <div className="row">
-              <div className="col-12 my-2">
-                <h3 className="resume-section-title">Professional Summary</h3>
-                <SummaryGenerator 
-                  formData={{
-                    experienceList,
-                    currentJob,
-                    technicalSkills,
-                    nonTechnicalSkills,
-                    educationList,
-                    projects
-                  }}
-                  onSummaryGenerated={handleSummaryGenerated}
-                />
-                <textarea
-      className="form-control"
-                  rows="5"
-                  value={summary}
-                  onChange={(e) => setSummary(e.target.value)}
-                  placeholder="Write a brief summary of your professional experience and skills..."
-    />
-  </div>
-            </div>
-  <div className="text-center mt-4 mb-5">
-              <button type="submit" className="btn btn-success resume-form-btn">Submit</button>
-</div>
-  </form>
-</div>
-</div>
   );
 }; 
 
