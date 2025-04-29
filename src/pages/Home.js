@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { FaEnvelope, FaArrowRight } from 'react-icons/fa6';
 import Footer from '../components/Footer';
 import './Home.css'; // Import the CSS file
@@ -59,7 +59,15 @@ const Home = () => {
       {/* Header */}
       <header className="header">
         <div className="container">
-          <h1 className="header-title">Apna CV Maker</h1>
+          <div className="header-content">
+            <h1 className="header-title">Apna CV Maker</h1>
+            <nav className="header-nav">
+              <Link to="/vision" className="nav-link">Our Vision</Link>
+              <Link to="/blog" className="nav-link">Blog</Link>
+              <Link to="/careers" className="nav-link">Careers</Link>
+              <Link to="/products" className="nav-link">Our Products</Link>
+            </nav>
+          </div>
         </div>
       </header>
 
