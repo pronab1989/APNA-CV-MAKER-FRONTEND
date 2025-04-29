@@ -1,0 +1,69 @@
+.careers-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 2rem 0;
+}
+
+.careers-page h1 {
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.careers-intro {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.careers-intro p {
+  color: #555;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.openings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.job-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.job-card h2 {
+  color: #1a73e8;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.job-details {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.job-type {
+  background-color: #e8f0fe;
+  color: #1a73e8;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.job-location {
+  color: #666;
+  font-size: 0.9rem;
+  padding: 0.25rem 0;
+}
+
+.job-card p {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+} 

@@ -1,0 +1,78 @@
+.products-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 2rem 0;
+}
+
+.products-page h1 {
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.products-intro {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.products-intro p {
+  color: #555;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.product-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-card h2 {
+  color: #1a73e8;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.product-description {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.features-list {
+  margin-bottom: 1.5rem;
+}
+
+.features-list h3 {
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.features-list ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.features-list ul li {
+  color: #555;
+  padding: 0.5rem 0;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.features-list ul li:before {
+  content: "✓";
+  color: #1a73e8;
+  position: absolute;
+  left: 0;
+} 

@@ -1,0 +1,55 @@
+.vision-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 2rem 0;
+}
+
+.vision-page h1 {
+  color: #333;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.content-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.vision-content h2 {
+  color: #1a73e8;
+  margin: 1.5rem 0 1rem;
+  font-size: 1.5rem;
+}
+
+.vision-content h2:first-child {
+  margin-top: 0;
+}
+
+.vision-content p {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.vision-content ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.vision-content ul li {
+  padding: 0.5rem 0;
+  color: #555;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.vision-content ul li:before {
+  content: "•";
+  color: #1a73e8;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+} 
