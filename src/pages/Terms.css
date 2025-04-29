@@ -1,0 +1,53 @@
+.terms-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 2rem 0;
+}
+
+.terms-page h1 {
+  color: #333;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.content-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content-section h2 {
+  color: #444;
+  font-size: 1.5rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.content-section h2:first-child {
+  margin-top: 0;
+}
+
+.content-section p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.content-section ul {
+  color: #666;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.content-section ul li {
+  margin-bottom: 0.5rem;
+}
+
+.content-section a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.content-section a:hover {
+  text-decoration: underline;
+} 

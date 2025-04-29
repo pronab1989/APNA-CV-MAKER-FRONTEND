@@ -4,6 +4,8 @@ import Home from './pages/Home';
 import ResumeForm from './pages/ResumeForm';
 import ResumePreview from './components/ResumePreview';
 import Auth from './pages/Auth';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -16,6 +18,8 @@ function App() {
         <Route path="/form" element={<ResumeForm />} />
         <Route path="/preview" element={<ResumePreview />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
       </Routes>
     </Router>
   );

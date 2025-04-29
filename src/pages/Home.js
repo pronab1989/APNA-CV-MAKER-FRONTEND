@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaArrowRight } from 'react-icons/fa6';
+import Footer from '../components/Footer';
 import './Home.css'; // Import the CSS file
 
 const Home = () => {
@@ -221,6 +222,9 @@ const Home = () => {
           </div>
         </div>
       )}
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
