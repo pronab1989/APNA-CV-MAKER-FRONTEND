@@ -8,7 +8,7 @@ import ProfessionalTemplate from './templates/ProfessionalTemplate';
 const ResumePreview = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { formData, templateType, requiresPayment } = location.state || {};
+  const { formData, templateType } = location.state || {};
 
   if (!formData) {
     return (
