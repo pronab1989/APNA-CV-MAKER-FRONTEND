@@ -1,644 +1,480 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import './ResumeForm.css';
 
-const ResumeForm = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { templateType, requiresPayment } = location.state || {};
-  
+const ResumeForm = ({ templateType, onSave }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
+    dob: '',
     email: '',
     phone: '',
     address: '',
-    city: '',
-    country: '',
     summary: '',
-    education: {
-      university: '',
-      degree: '',
-      graduationYear: '',
-      cgpa: '',
-      relevantCourses: ''
-    },
-    skills: '',
-    projects: [{
-      title: '',
-      description: '',
-      technologies: '',
-      duration: ''
-    }],
-    experience: templateType === 'professional' || templateType === 'executive' ? [{
-      company: '',
-      position: '',
-      duration: '',
-      responsibilities: '',
-      achievements: ''
-    }] : [],
-    internships: templateType === 'student' || templateType === 'fresher' ? [{
-      company: '',
-      position: '',
-      duration: '',
-      description: ''
-    }] : [],
-    achievements: '',
-    certifications: '',
-    languages: '',
-    extraCurricular: '',
-    linkedin: ''
+    education: [{ institution: '', degree: '', year: '' }],
+    experience: [{ company: '', position: '', duration: '', description: '' }],
+    skills: [],
+    projects: [{ title: '', description: '' }],
+    certifications: [{ name: '', issuer: '', year: '' }]
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const API_URL = process.env.REACT_APP_API_URL || 'https://apna-cv-maker-server.onrender.com/api';
 
   useEffect(() => {
-    const savedData = localStorage.getItem('resumeFormData');
-    if (savedData) {
-      setFormData(JSON.parse(savedData));
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/auth';
     }
   }, []);
 
-  const handleInputChange = (e, index, section) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    if (section) {
-      if (Array.isArray(formData[section])) {
-        const newArray = [...formData[section]];
-        newArray[index] = { ...newArray[index], [name]: value };
-        setFormData(prev => ({ ...prev, [section]: newArray }));
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleArrayChange = (field, index, e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field].map((item, i) => 
+        i === index ? { ...item, [name]: value } : item
+      )
+    }));
+  };
+
+  const addItem = (field) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: [...prev[field], {}]
+    }));
+  };
+
+  const removeItem = (field, index) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field].filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    // Validate required fields
+    if (!formData.firstName || !formData.lastName || !formData.dob) {
+      setError('First name, last name, and date of birth are required fields.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `${API_URL}/resume`,
+        { ...formData, templateType },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      if (response.data && response.data._id) {
+        onSave(response.data);
       } else {
-        setFormData(prev => ({
-          ...prev,
-          [section]: { ...prev[section], [name]: value }
-        }));
+        setError('Failed to save resume. Please try again.');
       }
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+    } catch (err) {
+      setError(err.response?.data?.message || 'An error occurred while saving the resume.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const addItem = (section) => {
-    const newItem = section === 'projects' 
-      ? { title: '', description: '', technologies: '', duration: '' }
-      : section === 'experience'
-      ? { company: '', position: '', duration: '', responsibilities: '', achievements: '' }
-      : { company: '', position: '', duration: '', description: '' };
-
-    setFormData(prev => ({
-      ...prev,
-      [section]: [...prev[section], newItem]
-    }));
-  };
-
-  const removeItem = (section, index) => {
-    setFormData(prev => ({
-      ...prev,
-      [section]: prev[section].filter((_, i) => i !== index)
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    localStorage.setItem('resumeFormData', JSON.stringify(formData));
-    navigate('/preview', { 
-      state: { 
-        formData,
-        templateType,
-        requiresPayment 
-      } 
-    });
-  };
-
   return (
-    <div className="container my-5">
-      <h2 className="mb-4">Resume Information</h2>
+    <div className="resume-form-container">
       <form onSubmit={handleSubmit}>
-        {/* Personal Information */}
-        <div className="card mb-4">
-          <div className="card-header">
-            <h3 className="h5 mb-0">Personal Information</h3>
-          </div>
-          <div className="card-body">
-            <div className="row">
-              <div className="col-md-6 mb-3">
-                <label className="form-label">First Name</label>
+        {error && <div className="alert alert-danger">{error}</div>}
+        
+        <div className="form-section">
+          <h3>Personal Information</h3>
+          <div className="row">
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label className="form-label">First Name <span className="text-danger">*</span></label>
                 <input
                   type="text"
                   className="form-control"
                   name="firstName"
                   value={formData.firstName}
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                   required
+                  disabled={loading}
                 />
               </div>
-              <div className="col-md-6 mb-3">
-                <label className="form-label">Last Name</label>
+            </div>
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label className="form-label">Last Name <span className="text-danger">*</span></label>
                 <input
                   type="text"
                   className="form-control"
                   name="lastName"
                   value={formData.lastName}
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                   required
+                  disabled={loading}
                 />
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-6 mb-3">
+          </div>
+          <div className="row">
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label className="form-label">Date of Birth <span className="text-danger">*</span></label>
+                <input
+                  type="date"
+                  className="form-control"
+                  name="dob"
+                  value={formData.dob}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                />
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="mb-3">
                 <label className="form-label">Email</label>
                 <input
                   type="email"
                   className="form-control"
                   name="email"
                   value={formData.email}
-                  onChange={handleInputChange}
-                  required
+                  onChange={handleChange}
+                  disabled={loading}
                 />
               </div>
-              <div className="col-md-6 mb-3">
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-6">
+              <div className="mb-3">
                 <label className="form-label">Phone</label>
                 <input
                   type="tel"
                   className="form-control"
                   name="phone"
                   value={formData.phone}
-                  onChange={handleInputChange}
-                  required
+                  onChange={handleChange}
+                  disabled={loading}
                 />
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-6 mb-3">
+            <div className="col-md-6">
+              <div className="mb-3">
                 <label className="form-label">Address</label>
                 <input
                   type="text"
                   className="form-control"
                   name="address"
                   value={formData.address}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3 mb-3">
-                <label className="form-label">City</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3 mb-3">
-                <label className="form-label">Country</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleInputChange}
+                  onChange={handleChange}
+                  disabled={loading}
                 />
               </div>
             </div>
-            {(templateType === 'professional' || templateType === 'executive') && (
+          </div>
+        </div>
+
+        <div className="form-section">
+          <h3>Professional Summary</h3>
+          <div className="mb-3">
+            <textarea
+              className="form-control"
+              name="summary"
+              value={formData.summary}
+              onChange={handleChange}
+              rows="4"
+              disabled={loading}
+              placeholder="Write a brief summary of your professional background and career objectives"
+            />
+          </div>
+        </div>
+
+        <div className="form-section">
+          <h3>Education</h3>
+          {formData.education.map((edu, index) => (
+            <div key={index} className="education-item mb-3">
               <div className="row">
-                <div className="col-12 mb-3">
-                  <label className="form-label">Professional Summary</label>
-                  <textarea
+                <div className="col-md-4">
+                  <input
+                    type="text"
                     className="form-control"
-                    name="summary"
-                    value={formData.summary}
-                    onChange={handleInputChange}
-                    rows="4"
+                    name="institution"
+                    value={edu.institution}
+                    onChange={(e) => handleArrayChange('education', index, e)}
+                    placeholder="Institution"
+                    disabled={loading}
                   />
                 </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Education */}
-        <div className="card mb-4">
-          <div className="card-header">
-            <h3 className="h5 mb-0">Education</h3>
-          </div>
-          <div className="card-body">
-            <div className="row">
-              <div className="col-md-6 mb-3">
-                <label className="form-label">University/Institution</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="university"
-                  value={formData.education.university}
-                  onChange={(e) => handleInputChange(e, 0, 'education')}
-                  required
-                />
-              </div>
-              <div className="col-md-6 mb-3">
-                <label className="form-label">Degree</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="degree"
-                  value={formData.education.degree}
-                  onChange={(e) => handleInputChange(e, 0, 'education')}
-                  required
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6 mb-3">
-                <label className="form-label">Graduation Year</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="graduationYear"
-                  value={formData.education.graduationYear}
-                  onChange={(e) => handleInputChange(e, 0, 'education')}
-                  required
-                />
-              </div>
-              <div className="col-md-6 mb-3">
-                <label className="form-label">CGPA</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="cgpa"
-                  value={formData.education.cgpa}
-                  onChange={(e) => handleInputChange(e, 0, 'education')}
-                  required
-                />
-              </div>
-            </div>
-            {templateType === 'student' && (
-              <div className="row">
-                <div className="col-12 mb-3">
-                  <label className="form-label">Relevant Courses</label>
-                  <textarea
+                <div className="col-md-4">
+                  <input
+                    type="text"
                     className="form-control"
-                    name="relevantCourses"
-                    value={formData.education.relevantCourses}
-                    onChange={(e) => handleInputChange(e, 0, 'education')}
-                    placeholder="List your relevant courses"
-                    rows="3"
+                    name="degree"
+                    value={edu.degree}
+                    onChange={(e) => handleArrayChange('education', index, e)}
+                    placeholder="Degree"
+                    disabled={loading}
                   />
                 </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Skills */}
-        <div className="card mb-4">
-          <div className="card-header">
-            <h3 className="h5 mb-0">Skills</h3>
-          </div>
-          <div className="card-body">
-            <div className="row">
-              <div className="col-12 mb-3">
-                <label className="form-label">Technical Skills (comma-separated)</label>
-                <textarea
-                  className="form-control"
-                  name="skills"
-                  value={formData.skills}
-                  onChange={handleInputChange}
-                  placeholder="e.g., JavaScript, React, Node.js"
-                  rows="3"
-                  required
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Projects */}
-        <div className="card mb-4">
-          <div className="card-header d-flex justify-content-between align-items-center">
-            <h3 className="h5 mb-0">Projects</h3>
-            <button
-              type="button"
-              className="btn btn-sm btn-primary"
-              onClick={() => addItem('projects')}
-            >
-              Add Project
-            </button>
-          </div>
-          <div className="card-body">
-            {formData.projects.map((project, index) => (
-              <div key={index} className="project-item mb-4">
-                <div className="row">
-                  <div className="col-md-6 mb-3">
-                    <label className="form-label">Project Title</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="title"
-                      value={project.title}
-                      onChange={(e) => handleInputChange(e, index, 'projects')}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <label className="form-label">Duration</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="duration"
-                      value={project.duration}
-                      onChange={(e) => handleInputChange(e, index, 'projects')}
-                    />
-                  </div>
+                <div className="col-md-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="year"
+                    value={edu.year}
+                    onChange={(e) => handleArrayChange('education', index, e)}
+                    placeholder="Year"
+                    disabled={loading}
+                  />
                 </div>
-                <div className="row">
-                  <div className="col-12 mb-3">
-                    <label className="form-label">Description</label>
-                    <textarea
-                      className="form-control"
-                      name="description"
-                      value={project.description}
-                      onChange={(e) => handleInputChange(e, index, 'projects')}
-                      rows="3"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-12 mb-3">
-                    <label className="form-label">Technologies Used</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="technologies"
-                      value={project.technologies}
-                      onChange={(e) => handleInputChange(e, index, 'projects')}
-                      required
-                    />
-                  </div>
-                </div>
-                {index > 0 && (
+                <div className="col-md-1">
                   <button
                     type="button"
-                    className="btn btn-sm btn-danger"
-                    onClick={() => removeItem('projects', index)}
+                    className="btn btn-danger"
+                    onClick={() => removeItem('education', index)}
+                    disabled={loading}
                   >
-                    Remove Project
+                    ×
                   </button>
-                )}
+                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => addItem('education')}
+            disabled={loading}
+          >
+            Add Education
+          </button>
         </div>
 
-        {/* Experience (for Professional/Executive) */}
-        {(templateType === 'professional' || templateType === 'executive') && (
-          <div className="card mb-4">
-            <div className="card-header d-flex justify-content-between align-items-center">
-              <h3 className="h5 mb-0">Work Experience</h3>
-              <button
-                type="button"
-                className="btn btn-sm btn-primary"
-                onClick={() => addItem('experience')}
-              >
-                Add Experience
-              </button>
-            </div>
-            <div className="card-body">
-              {formData.experience.map((exp, index) => (
-                <div key={index} className="experience-item mb-4">
-                  <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label className="form-label">Company</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="company"
-                        value={exp.company}
-                        onChange={(e) => handleInputChange(e, index, 'experience')}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-6 mb-3">
-                      <label className="form-label">Position</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="position"
-                        value={exp.position}
-                        onChange={(e) => handleInputChange(e, index, 'experience')}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label className="form-label">Duration</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="duration"
-                        value={exp.duration}
-                        onChange={(e) => handleInputChange(e, index, 'experience')}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-12 mb-3">
-                      <label className="form-label">Responsibilities</label>
-                      <textarea
-                        className="form-control"
-                        name="responsibilities"
-                        value={exp.responsibilities}
-                        onChange={(e) => handleInputChange(e, index, 'experience')}
-                        rows="3"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-12 mb-3">
-                      <label className="form-label">Key Achievements</label>
-                      <textarea
-                        className="form-control"
-                        name="achievements"
-                        value={exp.achievements}
-                        onChange={(e) => handleInputChange(e, index, 'experience')}
-                        rows="3"
-                      />
-                    </div>
-                  </div>
-                  {index > 0 && (
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-danger"
-                      onClick={() => removeItem('experience', index)}
-                    >
-                      Remove Experience
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Internships (for Student/Fresher) */}
-        {(templateType === 'student' || templateType === 'fresher') && (
-          <div className="card mb-4">
-            <div className="card-header d-flex justify-content-between align-items-center">
-              <h3 className="h5 mb-0">Internships</h3>
-              <button
-                type="button"
-                className="btn btn-sm btn-primary"
-                onClick={() => addItem('internships')}
-              >
-                Add Internship
-              </button>
-            </div>
-            <div className="card-body">
-              {formData.internships.map((internship, index) => (
-                <div key={index} className="internship-item mb-4">
-                  <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label className="form-label">Company</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="company"
-                        value={internship.company}
-                        onChange={(e) => handleInputChange(e, index, 'internships')}
-                      />
-                    </div>
-                    <div className="col-md-6 mb-3">
-                      <label className="form-label">Position</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="position"
-                        value={internship.position}
-                        onChange={(e) => handleInputChange(e, index, 'internships')}
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label className="form-label">Duration</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="duration"
-                        value={internship.duration}
-                        onChange={(e) => handleInputChange(e, index, 'internships')}
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-12 mb-3">
-                      <label className="form-label">Description</label>
-                      <textarea
-                        className="form-control"
-                        name="description"
-                        value={internship.description}
-                        onChange={(e) => handleInputChange(e, index, 'internships')}
-                        rows="3"
-                      />
-                    </div>
-                  </div>
-                  {index > 0 && (
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-danger"
-                      onClick={() => removeItem('internships', index)}
-                    >
-                      Remove Internship
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Additional Sections */}
-        <div className="card mb-4">
-          <div className="card-header">
-            <h3 className="h5 mb-0">Additional Information</h3>
-          </div>
-          <div className="card-body">
-            <div className="row">
-              <div className="col-12 mb-3">
-                <label className="form-label">Achievements</label>
-                <textarea
-                  className="form-control"
-                  name="achievements"
-                  value={formData.achievements}
-                  onChange={handleInputChange}
-                  placeholder="List your achievements (one per line)"
-                  rows="3"
-                />
-              </div>
-            </div>
-
-            {(templateType === 'professional' || templateType === 'executive') && (
+        <div className="form-section">
+          <h3>Work Experience</h3>
+          {formData.experience.map((exp, index) => (
+            <div key={index} className="experience-item mb-3">
               <div className="row">
-                <div className="col-12 mb-3">
-                  <label className="form-label">Certifications</label>
+                <div className="col-md-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="company"
+                    value={exp.company}
+                    onChange={(e) => handleArrayChange('experience', index, e)}
+                    placeholder="Company"
+                    disabled={loading}
+                  />
+                </div>
+                <div className="col-md-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="position"
+                    value={exp.position}
+                    onChange={(e) => handleArrayChange('experience', index, e)}
+                    placeholder="Position"
+                    disabled={loading}
+                  />
+                </div>
+                <div className="col-md-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="duration"
+                    value={exp.duration}
+                    onChange={(e) => handleArrayChange('experience', index, e)}
+                    placeholder="Duration"
+                    disabled={loading}
+                  />
+                </div>
+                <div className="col-md-2">
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => removeItem('experience', index)}
+                    disabled={loading}
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+              <div className="row mt-2">
+                <div className="col-12">
                   <textarea
                     className="form-control"
-                    name="certifications"
-                    value={formData.certifications}
-                    onChange={handleInputChange}
-                    placeholder="List your certifications (one per line)"
-                    rows="3"
+                    name="description"
+                    value={exp.description}
+                    onChange={(e) => handleArrayChange('experience', index, e)}
+                    placeholder="Description"
+                    rows="2"
+                    disabled={loading}
                   />
                 </div>
               </div>
-            )}
-
-            {templateType === 'student' && (
-              <div className="row">
-                <div className="col-12 mb-3">
-                  <label className="form-label">Extra-Curricular Activities</label>
-                  <textarea
-                    className="form-control"
-                    name="extraCurricular"
-                    value={formData.extraCurricular}
-                    onChange={handleInputChange}
-                    placeholder="List your extra-curricular activities (one per line)"
-                    rows="3"
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className="row">
-              <div className="col-md-6 mb-3">
-                <label className="form-label">Languages (comma-separated)</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="languages"
-                  value={formData.languages}
-                  onChange={handleInputChange}
-                  placeholder="e.g., English, Hindi, Spanish"
-                />
-              </div>
-              <div className="col-md-6 mb-3">
-                <label className="form-label">LinkedIn Profile</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="linkedin"
-                  value={formData.linkedin}
-                  onChange={handleInputChange}
-                  placeholder="Your LinkedIn profile URL"
-                />
-              </div>
             </div>
+          ))}
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => addItem('experience')}
+            disabled={loading}
+          >
+            Add Experience
+          </button>
+        </div>
+
+        <div className="form-section">
+          <h3>Skills</h3>
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              value={formData.skills.join(', ')}
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                skills: e.target.value.split(',').map(skill => skill.trim())
+              }))}
+              placeholder="Enter skills separated by commas"
+              disabled={loading}
+            />
           </div>
         </div>
 
-        <div className="text-center">
-          <button type="submit" className="btn btn-primary btn-lg">
-            Preview Resume
+        <div className="form-section">
+          <h3>Projects</h3>
+          {formData.projects.map((project, index) => (
+            <div key={index} className="project-item mb-3">
+              <div className="row">
+                <div className="col-md-11">
+                  <input
+                    type="text"
+                    className="form-control mb-2"
+                    name="title"
+                    value={project.title}
+                    onChange={(e) => handleArrayChange('projects', index, e)}
+                    placeholder="Project Title"
+                    disabled={loading}
+                  />
+                  <textarea
+                    className="form-control"
+                    name="description"
+                    value={project.description}
+                    onChange={(e) => handleArrayChange('projects', index, e)}
+                    placeholder="Project Description"
+                    rows="2"
+                    disabled={loading}
+                  />
+                </div>
+                <div className="col-md-1">
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => removeItem('projects', index)}
+                    disabled={loading}
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => addItem('projects')}
+            disabled={loading}
+          >
+            Add Project
+          </button>
+        </div>
+
+        <div className="form-section">
+          <h3>Certifications</h3>
+          {formData.certifications.map((cert, index) => (
+            <div key={index} className="certification-item mb-3">
+              <div className="row">
+                <div className="col-md-4">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="name"
+                    value={cert.name}
+                    onChange={(e) => handleArrayChange('certifications', index, e)}
+                    placeholder="Certification Name"
+                    disabled={loading}
+                  />
+                </div>
+                <div className="col-md-4">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="issuer"
+                    value={cert.issuer}
+                    onChange={(e) => handleArrayChange('certifications', index, e)}
+                    placeholder="Issuing Organization"
+                    disabled={loading}
+                  />
+                </div>
+                <div className="col-md-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="year"
+                    value={cert.year}
+                    onChange={(e) => handleArrayChange('certifications', index, e)}
+                    placeholder="Year"
+                    disabled={loading}
+                  />
+                </div>
+                <div className="col-md-1">
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => removeItem('certifications', index)}
+                    disabled={loading}
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => addItem('certifications')}
+            disabled={loading}
+          >
+            Add Certification
+          </button>
+        </div>
+
+        <div className="form-actions">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={loading}
+          >
+            {loading ? 'Saving...' : 'Save Resume'}
           </button>
         </div>
       </form>

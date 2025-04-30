@@ -10,6 +10,7 @@ import Vision from './pages/Vision';
 import Blog from './pages/Blog';
 import Careers from './pages/Careers';
 import Products from './pages/Products';
+import Home from './pages/Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -20,7 +21,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<Navigate to="/templates" />} />
+          <Route path="/" element={<Home />} />
           <Route path="/templates" element={<TemplateSelection />} />
           <Route path="/form" element={<ResumeForm />} />
           <Route path="/preview" element={<ResumePreview />} />

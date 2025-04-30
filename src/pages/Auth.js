@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './Auth.css';
 
 const Auth = () => {
-  const [mode, setMode] = useState('login'); // 'login' or 'signup'
+  const [mode, setMode] = useState('login');
   const [loginData, setLoginData] = useState({ email: '', password: '' });
-  const [signupData, setSignupData] = useState({ email: '', password: '', mobile: '' });
+  const [signupData, setSignupData] = useState({ email: '', password: '' });
   const [showForgot, setShowForgot] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,8 +29,9 @@ const Auth = () => {
       });
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('email', response.data.email);
         setLoading(false);
-        navigate('/form');
+        navigate('/templates');
       } else {
         setError('Invalid response from server.');
         setLoading(false);
@@ -54,13 +56,9 @@ const Auth = () => {
         email: signupData.email,
         password: signupData.password
       });
-      if (response.data && (response.data.token || response.data.message)) {
-        // If backend returns token, store it. If only message, just show success.
-        if (response.data.token) {
-          localStorage.setItem('token', response.data.token);
-        }
+      if (response.data && response.data.message === 'User registered successfully') {
         setLoading(false);
-        navigate('/form');
+        navigate('/templates');
       } else {
         setError('Invalid response from server.');
         setLoading(false);
@@ -77,17 +75,18 @@ const Auth = () => {
   };
 
   return (
-    <div className="container mt-5" style={{ maxWidth: 400 }}>
-      <div className="card shadow p-4">
-        <div className="d-flex justify-content-center mb-3">
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="text-center mb-4">Welcome to Apna CV Maker</h2>
+        <div className="d-flex justify-content-center mb-4">
           <button
-            className={`btn btn-outline-primary me-2 ${mode === 'login' ? 'active' : ''}`}
+            className={`auth-tab ${mode === 'login' ? 'active' : ''}`}
             onClick={() => { setMode('login'); setShowForgot(false); setError(''); }}
           >
             Log In
           </button>
           <button
-            className={`btn btn-outline-success ${mode === 'signup' ? 'active' : ''}`}
+            className={`auth-tab ${mode === 'signup' ? 'active' : ''}`}
             onClick={() => { setMode('signup'); setShowForgot(false); setError(''); }}
           >
             Sign Up
@@ -97,7 +96,7 @@ const Auth = () => {
         {mode === 'login' && !showForgot && (
           <form onSubmit={handleLogin}>
             <div className="mb-3">
-              <label>Email</label>
+              <label className="form-label">Email <span className="text-danger">*</span></label>
               <input
                 type="email"
                 className="form-control"
@@ -105,10 +104,11 @@ const Auth = () => {
                 onChange={e => setLoginData({ ...loginData, email: e.target.value })}
                 required
                 disabled={loading}
+                placeholder="Enter your email"
               />
             </div>
             <div className="mb-3">
-              <label>Password</label>
+              <label className="form-label">Password <span className="text-danger">*</span></label>
               <input
                 type="password"
                 className="form-control"
@@ -116,13 +116,14 @@ const Auth = () => {
                 onChange={e => setLoginData({ ...loginData, password: e.target.value })}
                 required
                 disabled={loading}
+                placeholder="Enter your password"
               />
             </div>
             <div className="d-flex justify-content-between align-items-center mb-3">
               <button type="submit" className="btn btn-primary" disabled={loading}>
                 {loading ? 'Logging in...' : 'Log In'}
               </button>
-              <button type="button" className="btn btn-link p-0" onClick={handleForgotPassword} disabled={loading}>
+              <button type="button" className="btn btn-link p-0" onClick={() => setShowForgot(true)} disabled={loading}>
                 Forgot Password?
               </button>
             </div>
@@ -131,7 +132,7 @@ const Auth = () => {
         {mode === 'signup' && (
           <form onSubmit={handleSignup}>
             <div className="mb-3">
-              <label>Email</label>
+              <label className="form-label">Email <span className="text-danger">*</span></label>
               <input
                 type="email"
                 className="form-control"
@@ -139,10 +140,11 @@ const Auth = () => {
                 onChange={e => setSignupData({ ...signupData, email: e.target.value })}
                 required
                 disabled={loading}
+                placeholder="Enter your email"
               />
             </div>
             <div className="mb-3">
-              <label>Password</label>
+              <label className="form-label">Password <span className="text-danger">*</span></label>
               <input
                 type="password"
                 className="form-control"
@@ -150,17 +152,7 @@ const Auth = () => {
                 onChange={e => setSignupData({ ...signupData, password: e.target.value })}
                 required
                 disabled={loading}
-              />
-            </div>
-            {/* Mobile field is present for UI but not sent to backend */}
-            <div className="mb-3">
-              <label>Mobile Number</label>
-              <input
-                type="tel"
-                className="form-control"
-                value={signupData.mobile}
-                onChange={e => setSignupData({ ...signupData, mobile: e.target.value })}
-                disabled={loading}
+                placeholder="Create a password"
               />
             </div>
             <button type="submit" className="btn btn-success w-100" disabled={loading}>
