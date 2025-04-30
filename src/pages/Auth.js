@@ -69,11 +69,6 @@ const Auth = () => {
     }
   };
 
-  const handleForgotPassword = () => {
-    setShowForgot(true);
-    // You can add forgot password logic here
-  };
-
   return (
     <div className="auth-container">
       <div className="auth-card">
