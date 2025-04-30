@@ -1,0 +1,558 @@
+.resume-template {
+  max-width: 210mm;
+  margin: 0 auto;
+  padding: 20mm;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  background: white;
+}
+
+/* Fresher Template Styles */
+.fresher-template {
+  line-height: 1.6;
+}
+
+.fresher-template .resume-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #1976d2;
+}
+
+.fresher-template .resume-header h1 {
+  color: #1976d2;
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.fresher-template .contact-info {
+  color: #666;
+}
+
+.fresher-template .resume-section {
+  margin-bottom: 2rem;
+}
+
+.fresher-template .resume-section h2 {
+  color: #1976d2;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.fresher-template .education-item {
+  margin-bottom: 1rem;
+}
+
+.fresher-template .education-item h3 {
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+
+.fresher-template .skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.fresher-template .skill-tag {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
+}
+
+.fresher-template .project-item,
+.fresher-template .internship-item {
+  margin-bottom: 1.5rem;
+}
+
+.fresher-template .project-item h3,
+.fresher-template .internship-item h3 {
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+
+.fresher-template .achievements-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.fresher-template .achievements-list li {
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.fresher-template .achievements-list li::before {
+  content: "•";
+  color: #1976d2;
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+/* Student Template Styles */
+.student-template {
+  line-height: 1.6;
+  background: #fff;
+}
+
+.student-template .resume-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  background: #2196f3;
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.student-template .resume-header h1 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.student-template .contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.student-template .icon {
+  margin-right: 0.5rem;
+}
+
+.student-template .resume-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.student-template .resume-section h2 {
+  color: #2196f3;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.student-template .resume-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: #2196f3;
+}
+
+.student-template .education-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-template .year {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.student-template .degree {
+  color: #2196f3;
+  font-weight: 500;
+  margin: 0.5rem 0;
+}
+
+.student-template .cgpa {
+  color: #666;
+}
+
+.student-template .skills-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.student-template .skill-item {
+  margin-bottom: 1rem;
+}
+
+.student-template .skill-name {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.student-template .skill-bar {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.student-template .skill-level {
+  height: 100%;
+  background: #2196f3;
+  border-radius: 4px;
+}
+
+.student-template .project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.student-template .project-duration {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.student-template .tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.student-template .tech-tag {
+  background: #e3f2fd;
+  color: #2196f3;
+  padding: 0.2rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
+}
+
+.student-template .internship-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-template .position {
+  color: #2196f3;
+  font-weight: 500;
+  margin: 0.5rem 0;
+}
+
+.student-template .internship-points {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.student-template .internship-points li {
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.student-template .internship-points li::before {
+  content: "→";
+  color: #2196f3;
+  position: absolute;
+  left: 0;
+}
+
+.student-template .achievements-list,
+.student-template .activities-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.student-template .achievements-list li,
+.student-template .activities-list li {
+  margin-bottom: 0.8rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.student-template .achievements-list li::before,
+.student-template .activities-list li::before {
+  content: "★";
+  color: #2196f3;
+  position: absolute;
+  left: 0;
+}
+
+/* Print Styles */
+@media print {
+  .resume-template {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .student-template {
+    font-size: 11pt;
+  }
+  
+  .student-template .resume-header {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .student-template .resume-section {
+    page-break-inside: avoid;
+  }
+}
+
+/* Professional Template Styles */
+.professional-template {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 2rem;
+  padding: 0;
+  font-family: 'Roboto', 'Arial', sans-serif;
+}
+
+.professional-template .sidebar {
+  background: #2c3e50;
+  color: white;
+  padding: 2rem;
+  min-height: 297mm;
+}
+
+.professional-template .profile-section {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.professional-template .profile-name h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.professional-template .job-title {
+  color: #3498db;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.professional-template .sidebar-section {
+  margin-bottom: 2rem;
+}
+
+.professional-template .sidebar-section h2 {
+  color: #3498db;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.professional-template .contact-details p {
+  margin: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.professional-template .skill-item {
+  margin-bottom: 1rem;
+}
+
+.professional-template .skill-name {
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.professional-template .skill-level-indicator {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.professional-template .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.professional-template .dot.filled {
+  background: #3498db;
+}
+
+.professional-template .language-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.professional-template .main-content {
+  padding: 2rem 3rem 2rem 1rem;
+}
+
+.professional-template .main-content section {
+  margin-bottom: 2.5rem;
+}
+
+.professional-template .main-content h2 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.professional-template .main-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: #3498db;
+}
+
+.professional-template .experience-item {
+  margin-bottom: 2rem;
+}
+
+.professional-template .experience-header {
+  margin-bottom: 1rem;
+}
+
+.professional-template .experience-header h3 {
+  color: #2c3e50;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.professional-template .company {
+  color: #3498db;
+  font-weight: 500;
+  display: block;
+  margin: 0.3rem 0;
+}
+
+.professional-template .duration {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.professional-template .experience-details {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.professional-template .experience-details li {
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.professional-template .experience-details li::before {
+  content: "•";
+  color: #3498db;
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.professional-template .achievements {
+  margin-top: 1rem;
+}
+
+.professional-template .achievements ul {
+  list-style-type: none;
+  padding-left: 1.5rem;
+}
+
+.professional-template .achievements li {
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.professional-template .achievements li::before {
+  content: "★";
+  color: #3498db;
+  position: absolute;
+  left: -1.5rem;
+}
+
+.professional-template .education-item h3 {
+  color: #2c3e50;
+  margin: 0;
+}
+
+.professional-template .institution {
+  color: #3498db;
+  margin: 0.3rem 0;
+}
+
+.professional-template .education-details {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.professional-template .certifications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.professional-template .certification-item {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.professional-template .cert-icon {
+  color: #3498db;
+}
+
+.professional-template .project-item {
+  margin-bottom: 1.5rem;
+}
+
+.professional-template .project-item h3 {
+  color: #2c3e50;
+  margin: 0 0 0.5rem 0;
+}
+
+.professional-template .project-description {
+  margin-bottom: 0.5rem;
+}
+
+.professional-template .tech-badge {
+  display: inline-block;
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 0.2rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Print styles for Professional Template */
+@media print {
+  .professional-template {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .professional-template .sidebar {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .professional-template .main-content section {
+    page-break-inside: avoid;
+  }
+} 
