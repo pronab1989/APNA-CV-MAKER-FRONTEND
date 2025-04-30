@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Home from './pages/Home';
 import ResumeForm from './components/ResumeForm';
 import ResumePreview from './components/ResumePreview';
 import TemplateSelection from './components/TemplateSelection';
