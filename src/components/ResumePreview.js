@@ -143,7 +143,10 @@ const ResumePreview = () => {
               <div className="modal-body text-center">
                 <p style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>Ready for your new career adventure? If you appreciate my effort, buy me a coffee and help me keep building great tools! ☕</p>
                 <p style={{ fontSize: '1.2rem', color: '#0d6efd' }}>Amount: ₹27 INR</p>
-                <button className="btn btn-success" onClick={handleRazorpayPayment}>
+                <button 
+                  className="btn btn-success" 
+                  // onClick={handleRazorpayPayment} // Temporarily disabled
+                >
                   Proceed to Payment
                 </button>
               </div>
