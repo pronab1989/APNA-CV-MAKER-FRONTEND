@@ -7,8 +7,8 @@ const ResumePreview = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { formData } = location.state || {};
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [isPaymentSuccess, setIsPaymentSuccess] = useState(false);
+  // const [showPaymentModal, setShowPaymentModal] = useState(false);
+  // const [isPaymentSuccess, setIsPaymentSuccess] = useState(false);
 
   if (!formData) {
     return (
@@ -59,7 +59,7 @@ const ResumePreview = () => {
   };
 
   // Helper to dynamically load Razorpay script
-  function loadRazorpayScript(src) {
+  /* function loadRazorpayScript(src) {
     return new Promise((resolve) => {
       if (document.querySelector(`script[src='${src}']`)) {
         resolve(true);
@@ -75,11 +75,10 @@ const ResumePreview = () => {
       };
       document.body.appendChild(script);
     });
-  }
+  } */
 
   // Razorpay payment handler
-  // eslint-disable-next-line no-unused-vars 
-  const handleRazorpayPayment = async () => {
+  /* const handleRazorpayPayment = async () => {
     const res = await loadRazorpayScript('https://checkout.razorpay.com/v1/checkout.js');
     if (!res) {
       alert('Razorpay SDK failed to load. Are you online?');
@@ -109,7 +108,7 @@ const ResumePreview = () => {
     };
     const rzp = new window.Razorpay(options);
     rzp.open();
-  };
+  }; */
 
   return (
     <div className="container my-5">
@@ -118,7 +117,7 @@ const ResumePreview = () => {
         <div>
           <button 
             className="btn btn-primary me-2"
-            onClick={() => setShowPaymentModal(true)}
+            onClick={generatePDF}
           >
             Download Modern PDF
           </button>
@@ -132,8 +131,8 @@ const ResumePreview = () => {
       </div>
       {/* PDF Preview */}
       <ResumePDFView formData={formData} />
-      {/* Payment Modal */}
-      {showPaymentModal && (
+      {/* Payment Modal - Commented out for now */}
+      {/* {showPaymentModal && (
         <div className="modal show" style={{ display: 'block', background: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog">
             <div className="modal-content">
@@ -146,7 +145,7 @@ const ResumePreview = () => {
                 <p style={{ fontSize: '1.2rem', color: '#0d6efd' }}>Amount: ₹27 INR</p>
                 <button 
                   className="btn btn-success" 
-                  // onClick={handleRazorpayPayment} // Temporarily disabled
+                  onClick={handleRazorpayPayment}
                 >
                   Proceed to Payment
                 </button>
@@ -154,11 +153,11 @@ const ResumePreview = () => {
             </div>
           </div>
         </div>
-      )}
-      {/* Payment Success Message */}
-      {isPaymentSuccess && (
+      )} */}
+      {/* Payment Success Message - Commented out for now */}
+      {/* {isPaymentSuccess && (
         <div className="alert alert-success text-center mt-3">Payment successful! Your download will start shortly.</div>
-      )}
+      )} */}
     </div>
   );
 };
