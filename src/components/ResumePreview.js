@@ -78,6 +78,7 @@ const ResumePreview = () => {
   }
 
   // Razorpay payment handler
+  // eslint-disable-next-line no-unused-vars 
   const handleRazorpayPayment = async () => {
     const res = await loadRazorpayScript('https://checkout.razorpay.com/v1/checkout.js');
     if (!res) {
